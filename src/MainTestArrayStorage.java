@@ -2,7 +2,7 @@
  * Test for your ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-    static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
+     static ArrayStorage ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) {
         Resume r1 = new Resume();
@@ -26,7 +26,6 @@ public class MainTestArrayStorage {
         printAll();
         ARRAY_STORAGE.clear();
         printAll();
-
         System.out.println("Size: " + ARRAY_STORAGE.size());
     }
 

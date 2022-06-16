@@ -5,54 +5,52 @@ import java.util.Arrays;
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
+    int size = size();
 
     void clear() {
-        Arrays.fill(storage, 0, size() - 1, null);
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
     }
 
     void save(Resume resume) {
-        storage[size()] = resume;
+        storage[size] = resume;
+        size += 1;
     }
 
     Resume get(String uuid) {
-        Resume resume = null;
-        for (int i = 0; i < size(); i++) {
+        for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
-                resume = storage[i];
+                return storage[i];
             }
         }
-        return resume;
+        return null;
     }
 
     void delete(String uuid) {
-        int index;
-        for (int i = 0; i < size(); i++) {
+        int index = 0;
+        for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
                 storage[i].uuid = null;
                 index = i;
-                for (int j = index + 1; j < storage.length - 1; j++) {
-                    storage[j - 1] = storage[j];
-                    storage[j] = null;
-                }
             }
         }
+        System.arraycopy(storage, index + 1, storage, index, storage.length - index - 1);
+        size -= 1;
     }
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        return Arrays.copyOf(storage, size());
+        return Arrays.copyOf(storage, size);
     }
 
     int size() {
-        int size = 0;
         for (int i = 0; i < storage.length; i++) {
             if (storage[i] != null) {
                 size = i + 1;
             } else {
-                size = i;
-                break;
+                return i;
             }
         }
         return size;

@@ -14,7 +14,7 @@ public class ArrayStorage {
 
     void save(Resume resume) {
         storage[size] = resume;
-        size += 1;
+        size++;
     }
 
     Resume get(String uuid) {
@@ -34,8 +34,8 @@ public class ArrayStorage {
                 index = i;
             }
         }
-        System.arraycopy(storage, index + 1, storage, index, storage.length - index - 1);
-        size -= 1;
+        System.arraycopy(storage, index + 1, storage, index, size - index - 1);
+        size--;
     }
 
     /**
@@ -46,13 +46,6 @@ public class ArrayStorage {
     }
 
     int size() {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] != null) {
-                size = i + 1;
-            } else {
-                return i;
-            }
-        }
         return size;
     }
 }

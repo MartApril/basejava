@@ -2,13 +2,13 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private Resume[] storage = new Resume[10000];
+    private final Resume[] storage = new Resume[10000];
     private int size;
 
     public void clear() {
@@ -16,7 +16,7 @@ public class ArrayStorage {
         size = 0;
     }
 
-    public int check(String uuid) {
+    public int findIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
@@ -26,40 +26,50 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        int a = check(resume.getUuid());
-        if (a != -1) {
-            storage[a] = resume;
+        int index = findIndex(resume.getUuid());
+        if (index == -1) {
+            System.out.println("Resume " + resume.getUuid() + " was not found.");
+        } else {
+            storage[index] = resume;
             System.out.println("Resume " + resume.getUuid() + " was updated.");
-        } else System.out.println("Resume " + resume.getUuid() + " was not updated.");
+        }
     }
 
     public void save(Resume resume) {
-        int a = check(resume.getUuid());
-        if (a == -1 && size < storage.length) {
+        int index = findIndex(resume.getUuid());
+        if (size == storage.length) {
+            System.out.println("Storage overflow.");
+        } else if (index > -1) {
+            System.out.println("Resume " + resume.getUuid() + " already exists.");
+        } else {
             storage[size] = resume;
             size++;
             System.out.println("Resume " + resume.getUuid() + " was saved.");
-        } else System.out.println("Resume " + resume.getUuid() + " was not saved.");
+        }
     }
 
     public Resume get(String uuid) {
-        int a = check(uuid);
-        if (a != -1) {
-            System.out.println("Resume " + uuid + " was got.");
-            return storage[a];
-        } else {
-            System.out.println("Resume " + uuid + " was not got.");
+        int index = findIndex(uuid);
+        if (index == -1) {
+            System.out.println("Resume " + uuid + " was not found.");
             return null;
+        } else {
+            return storage[index];
         }
     }
 
     public void delete(String uuid) {
-        int a = check(uuid);
-        if (a != -1) {
-            System.arraycopy(storage, a + 1, storage, a, size - a - 1);
+        int index = findIndex(uuid);
+        if (index == -1) {
+            System.out.println("Resume " + uuid + " was not found.");
+        } else {
+            List<Resume> a = new ArrayList<>(Arrays.asList(storage));
+            a.remove(index);
+            a.toArray(storage);
+//          System.arraycopy(storage, index + 1, storage, index, size - index - 1);
             size--;
             System.out.println("Resume " + uuid + " was deleted.");
-        } else System.out.println("Resume " + uuid + " was not deleted.");
+        }
     }
 
     /**

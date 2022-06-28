@@ -63,9 +63,10 @@ public class ArrayStorage {
         if (index == -1) {
             System.out.println("Resume " + uuid + " was not found.");
         } else {
-            List<Resume> a = new ArrayList<>(Arrays.asList(storage));
-            a.remove(index);
-            a.toArray(storage);
+            if (size > 1) {
+                storage[index] = storage[size - 1];
+            }
+            storage[size - 1] = null;
 //          System.arraycopy(storage, index + 1, storage, index, size - index - 1);
             size--;
             System.out.println("Resume " + uuid + " was deleted.");

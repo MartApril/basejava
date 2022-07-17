@@ -6,19 +6,14 @@ import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
 
-    public void save(Resume resume) {
-        if (size == STORAGE_LIMIT) {
-            System.out.println("Storage overflow.");
-        } else if (Arrays.binarySearch(storage, 0, size, resume, Resume::compareTo) > -1) {
-            System.out.println("Resume " + resume.getUuid() + " already exists.");
-        } else if (size == 0) {
-            storage[size] = resume;
-        } else {
-            storage[size] = storage[size - 1];
-            storage[size - 1] = resume;
+    @Override
+    protected void saveByIndex(Resume resume) {
+        int searchIndex = Arrays.binarySearch(storage, 0, size, resume, Resume::compareTo);
+        int indexInStorage = -1 - searchIndex;
+        if (storage[indexInStorage] != null) {
+            System.arraycopy(storage, indexInStorage, storage, indexInStorage + 1, size);
         }
-        size++;
-        System.out.println("Resume " + resume.getUuid() + " was saved.");
+        storage[indexInStorage] = resume;
     }
 
     @Override

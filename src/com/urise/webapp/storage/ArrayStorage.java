@@ -7,11 +7,6 @@ import com.urise.webapp.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
     @Override
-    protected void saveByIndex(Resume resume) {
-        storage[size] = resume;
-    }
-
-    @Override
     protected int findIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
@@ -19,5 +14,16 @@ public class ArrayStorage extends AbstractArrayStorage {
             }
         }
         return -1;
+    }
+
+    @Override
+    protected void saveByIndex(Resume resume) {
+        storage[size] = resume;
+    }
+
+    @Override
+    protected void deleteByIndex(String uuid) {
+        storage[findIndex(uuid)] = storage[size];
+        storage[size] = null;
     }
 }

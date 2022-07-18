@@ -12,6 +12,12 @@ public abstract class AbstractArrayStorage implements Storage {
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
+    protected abstract int findIndex(String uuid);
+
+    protected abstract void saveByIndex(Resume resume);
+
+    protected abstract void deleteByIndex(String uuid);
+
     public int size() {
         return size;
     }
@@ -23,7 +29,7 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public void update(Resume resume) {
         int index = findIndex(resume.getUuid());
-        if (index == -1) {
+        if (index < 0) {
             System.out.println("Resume " + resume.getUuid() + " was not found.");
         } else {
             storage[index] = resume;
@@ -34,7 +40,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public void save(Resume resume) {
         if (size == STORAGE_LIMIT) {
             System.out.println("Storage overflow.");
-        } else if (findIndex(resume.getUuid()) > -1) {
+        } else if (findIndex(resume.getUuid()) >= 0) {
             System.out.println("Resume " + resume.getUuid() + " already exists.");
         } else {
             saveByIndex(resume);
@@ -43,34 +49,26 @@ public abstract class AbstractArrayStorage implements Storage {
         }
     }
 
-    protected abstract void saveByIndex(Resume resume);
-
-    public void delete(String uuid) {
-        int index = findIndex(uuid);
-        if (index == -1) {
-            System.out.println("Resume " + uuid + " was not found.");
-        } else {
-            size--;
-//            storage[index] = storage[size];
-//            storage[size] = null;
-            System.arraycopy(storage, index + 1, storage, index, size - index);
-            System.out.println("Resume " + uuid + " was deleted.");
-        }
-    }
-
     public Resume get(String uuid) {
         int index = findIndex(uuid);
-        if (index == -1) {
+        if (index < 0) {
             System.out.println("Resume " + uuid + " was not found.");
             return null;
         }
         return storage[index];
     }
 
-    protected abstract int findIndex(String uuid);
-
-
     public Resume[] getAll() {
         return Arrays.copyOf(storage, size);
+    }
+
+    public void delete(String uuid) {
+        if (findIndex(uuid) < 0) {
+            System.out.println("Resume " + uuid + " was not found.");
+        } else {
+            size--;
+            deleteByIndex(uuid);
+            System.out.println("Resume " + uuid + " was deleted.");
+        }
     }
 }

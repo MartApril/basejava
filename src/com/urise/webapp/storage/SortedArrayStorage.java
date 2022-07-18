@@ -5,6 +5,12 @@ import com.urise.webapp.model.Resume;
 import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
+    @Override
+    protected int findIndex(String uuid) {
+        Resume searchKey = new Resume();
+        searchKey.setUuid(uuid);
+        return Arrays.binarySearch(storage, 0, size, searchKey);
+    }
 
     @Override
     protected void saveByIndex(Resume resume) {
@@ -17,9 +23,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected int findIndex(String uuid) {
-        Resume searchKey = new Resume();
-        searchKey.setUuid(uuid);
-        return Arrays.binarySearch(storage, 0, size, searchKey);
+    protected void deleteByIndex(String uuid) {
+        System.arraycopy(storage, findIndex(uuid) + 1, storage, findIndex(uuid), size - findIndex(uuid));
     }
 }

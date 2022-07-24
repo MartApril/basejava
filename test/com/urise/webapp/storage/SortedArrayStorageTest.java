@@ -1,77 +1,60 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.StorageException;
-import com.urise.webapp.model.Resume;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.lang.reflect.Field;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 public class SortedArrayStorageTest extends AbstractArrayStorageTest {
+    public SortedArrayStorageTest() {
+        super(new SortedArrayStorage());
+    }
 
     @Override
-    public void setUp() throws Exception {
-        setStorage(new SortedArrayStorage());
+    public void setUp() {
         super.setUp();
     }
 
     @Override
-    public void size() throws Exception {
+    public void size() {
         super.size();
     }
 
     @Override
-    public void clear() throws Exception {
+    public void clear() {
         super.clear();
     }
 
     @Override
-    public void update() throws Exception {
+    public void update() {
         super.update();
     }
 
     @Override
-    public void getAll() throws Exception {
+    public void getAll() {
         super.getAll();
     }
 
     @Override
-    public void save() throws Exception {
-        Resume resume = new Resume("uuid0");
-        getStorage().save(resume);
-        Resume[] arraysOfResume = {resume, new Resume("uuid1"), new Resume("uuid2"), new Resume("uuid3")};
-        Assert.assertArrayEquals(arraysOfResume, getStorage().getAll());
+    public void save() {
     }
 
     @Override
-    public void delete() throws Exception {
-        getStorage().delete("uuid1");
-        Resume[] arraysOfResume = {new Resume("uuid2"), new Resume("uuid3")};
-        Assert.assertArrayEquals(arraysOfResume, getStorage().getAll());
+    public void delete() {
     }
 
     @Override
-    public void get() throws Exception {
+    public void get() {
         super.get();
     }
 
     @Override
-    public void getExist() throws Exception {
+    public void getExist() {
         super.getExist();
     }
 
     @Override
-    public void getNotExist() throws Exception {
+    public void getNotExist() {
         super.getNotExist();
     }
 
     @Override
-    @Test(expected = ArrayIndexOutOfBoundsException.class)
-    public void getStorageOverflow() throws Exception {
-        for (int i = getStorage().size(); i < 10000; i++) {
-            getStorage().save(new Resume());
-        }
+    public void getStorageOverflow() {
+        super.getStorageOverflow();
     }
 }

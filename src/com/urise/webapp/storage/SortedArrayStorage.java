@@ -16,7 +16,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         int searchIndex = Arrays.binarySearch(storage, 0, size, resume, Resume::compareTo);
         int indexInStorage = -1 - searchIndex;
         if (storage[indexInStorage] != null) {
-            System.arraycopy(storage, indexInStorage, storage, indexInStorage + 1, size);
+            System.arraycopy(storage, indexInStorage, storage, indexInStorage + 1, size-indexInStorage);
         }
         storage[indexInStorage] = resume;
     }

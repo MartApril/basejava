@@ -1,66 +1,62 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.model.Resume;
-import org.junit.Before;
-
-import java.lang.reflect.Field;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 public class ArrayStorageTest extends AbstractArrayStorageTest {
+    public ArrayStorageTest() {
+        super(new ArrayStorage());
+    }
+
     @Override
-    public void setUp() throws Exception {
-        setStorage(new ArrayStorage());
+    public void setUp() {
         super.setUp();
     }
 
     @Override
-    public void size() throws Exception {
+    public void size() {
         super.size();
     }
 
     @Override
-    public void clear() throws Exception {
+    public void clear() {
         super.clear();
     }
 
     @Override
-    public void update() throws Exception {
+    public void update() {
         super.update();
     }
 
     @Override
-    public void getAll() throws Exception {
+    public void getAll() {
         super.getAll();
     }
 
     @Override
-    public void save() throws Exception {
+    public void save() {
         super.save();
     }
 
     @Override
-    public void delete() throws Exception {
+    public void delete() {
         super.delete();
     }
 
     @Override
-    public void get() throws Exception {
+    public void get() {
         super.get();
     }
 
     @Override
-    public void getExist() throws Exception {
+    public void getExist() {
         super.getExist();
     }
 
     @Override
-    public void getNotExist() throws Exception {
+    public void getNotExist() {
         super.getNotExist();
     }
 
     @Override
-    public void getStorageOverflow() throws Exception {
+    public void getStorageOverflow() {
         super.getStorageOverflow();
     }
 }

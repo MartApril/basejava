@@ -3,23 +3,24 @@ package com.urise.webapp;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.ListStorage;
+import com.urise.webapp.storage.MapStorage;
 import com.urise.webapp.storage.Storage;
 
 /**
  * Test for your com.urise.webapp.storage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-    //            private static final Storage ARRAY_STORAGE = new ArrayStorage();
+    //                private static final Storage ARRAY_STORAGE = new ArrayStorage();
 //    private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
-    private static final Storage ARRAY_STORAGE = new ListStorage();
+//    private static final Storage ARRAY_STORAGE = new ListStorage();
+    private static final Storage ARRAY_STORAGE = new MapStorage();
 
     public static void main(String[] args) {
 
         Resume r3 = new Resume("uuid3");
         Resume r1 = new Resume("uuid1");
         Resume r2 = new Resume("uuid2");
-//
+
         ARRAY_STORAGE.save(r2);
         ARRAY_STORAGE.save(r3);
         ARRAY_STORAGE.save(r1);

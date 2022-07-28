@@ -7,49 +7,48 @@ import com.urise.webapp.model.Resume;
 public abstract class AbstractStorage implements Storage {
     protected Storage storage;
 
-    protected abstract int findSearchKey(String uuid);
+    protected abstract boolean isExist(Object object);
 
-    protected abstract void updateByRealization(Resume resume, int index);
+    protected abstract Object findSearchKey(String uuid);
 
-    protected abstract void saveByRealization(Resume resume);
+    protected abstract void doUpdate(Resume resume);
 
-    protected abstract Resume getByRealization(int index);
+    protected abstract void doSave(Resume resume);
 
-    protected abstract void deleteByIndex(int index);
+    protected abstract Resume doGet(String uuid);
+
+    protected abstract void doDelete(String uuid);
 
     public void update(Resume resume) {
-        int index = findSearchKey(resume.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
+        if (!isExist(resume)) {
+            throw new NotExistStorageException(resume.toString());
         } else {
-            updateByRealization(resume, index);
+            doUpdate(resume);
             System.out.println("Resume " + resume.getUuid() + " was updated.");
         }
     }
 
     public void save(Resume resume) {
-        if (findSearchKey(resume.getUuid()) >= 0) {
+        if (isExist(resume)) {
             throw new ExistStorageException(resume.getUuid());
         } else {
-            saveByRealization(resume);
+            doSave(resume);
             System.out.println("Resume " + resume.getUuid() + " was saved.");
         }
     }
 
     public Resume get(String uuid) {
-        int index = findSearchKey(uuid);
-        if (index < 0) {
+        if (!isExist(uuid)) {
             throw new NotExistStorageException(uuid);
         }
-        return getByRealization(index);
+        return doGet(uuid);
     }
 
     public void delete(String uuid) {
-        int index = findSearchKey(uuid);
-        if (index < 0) {
+        if (!isExist(uuid)) {
             throw new NotExistStorageException(uuid);
         } else {
-            deleteByIndex(index);
+            doDelete(uuid);
             System.out.println("Resume " + uuid + " was deleted.");
         }
     }

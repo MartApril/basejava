@@ -7,7 +7,7 @@ import com.urise.webapp.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
     @Override
-    protected int findIndex(String uuid) {
+    protected int findSearchKey(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
@@ -23,6 +23,7 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void deleteByIndex(int index) {
+        size--;
         storage[index] = storage[size];
         storage[size] = null;
     }

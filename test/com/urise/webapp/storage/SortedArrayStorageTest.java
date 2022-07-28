@@ -44,8 +44,8 @@ public class SortedArrayStorageTest extends AbstractArrayStorageTest {
     }
 
     @Override
-    public void getExist() {
-        super.getExist();
+    public void saveExist() {
+        super.saveExist();
     }
 
     @Override
@@ -54,7 +54,17 @@ public class SortedArrayStorageTest extends AbstractArrayStorageTest {
     }
 
     @Override
-    public void getStorageOverflow() {
-        super.getStorageOverflow();
+    public void updateNotExist() {
+        super.updateNotExist();
+    }
+
+    @Override
+    public void deleteNotExist() {
+        super.deleteNotExist();
+    }
+
+    @Override
+    public void testOverflow() {
+        super.testOverflow();
     }
 }

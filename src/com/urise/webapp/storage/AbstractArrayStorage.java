@@ -19,8 +19,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
 
     @Override
     protected boolean isExist(Object object) {
-        int index = (int) findSearchKey(String.valueOf(object));
-        return index >= 0;
+        return (int) object >= 0;
     }
 
     @Override

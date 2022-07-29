@@ -15,13 +15,12 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected Object findSearchKey(String uuid) {
-        return storage.get(uuid);
+        return uuid;
     }
 
     @Override
     protected void doUpdate(Resume resume) {
-    storage.remove(resume.getUuid());
-    storage.put(resume.getUuid(), resume);
+        storage.replace(resume.getUuid(), resume);
     }
 
     @Override
@@ -36,7 +35,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected void doDelete(String uuid) {
-    storage.remove(uuid);
+        storage.remove(uuid);
     }
 
     @Override

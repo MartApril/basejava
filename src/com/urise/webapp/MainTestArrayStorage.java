@@ -10,7 +10,7 @@ import com.urise.webapp.storage.Storage;
  * Test for your com.urise.webapp.storage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-    //                private static final Storage ARRAY_STORAGE = new ArrayStorage();
+//                        private static final Storage ARRAY_STORAGE = new ArrayStorage();
 //    private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
 //    private static final Storage ARRAY_STORAGE = new ListStorage();
     private static final Storage ARRAY_STORAGE = new MapStorage();

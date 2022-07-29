@@ -32,6 +32,7 @@ public class SortedArrayStorageTest extends AbstractArrayStorageTest {
 
     @Override
     public void save() {
+        super.save();
     }
 
     @Override

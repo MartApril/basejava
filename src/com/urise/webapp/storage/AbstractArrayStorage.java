@@ -15,7 +15,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
     protected int size = 0;
 
 
-    protected abstract void saveByIndex(Resume resume);
+    protected abstract void saveByIndex(Object object, Resume resume);
 
     @Override
     protected boolean isExist(Object object) {
@@ -23,25 +23,23 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
     }
 
     @Override
-    protected void doUpdate(Resume resume) {
-        int index = (int) findSearchKey(resume.getUuid());
-        storage[index] = resume;
+    protected void doUpdate(Object object, Resume resume) {
+        storage[(int) object] = resume;
     }
 
     @Override
-    protected void doSave(Resume resume) {
+    protected void doSave(Object object, Resume resume) {
         if (size >= STORAGE_LIMIT) {
             throw new StorageException("Storage overflow.", resume.getUuid());
         } else {
-            saveByIndex(resume);
+            saveByIndex(object, resume);
             size++;
         }
     }
 
     @Override
-    protected Resume doGet(String uuid) {
-        int index = (int) findSearchKey(uuid);
-        return storage[index];
+    protected Resume doGet(Object uuid) {
+        return storage[(int) uuid];
     }
 
     public int size() {

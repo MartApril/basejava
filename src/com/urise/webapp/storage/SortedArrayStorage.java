@@ -13,9 +13,10 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void saveByIndex(Resume resume) {
-        int searchIndex = Arrays.binarySearch(storage, 0, size, resume, Resume::compareTo);
-        int indexInStorage = -1 - searchIndex;
+    protected void saveByIndex(Object object, Resume resume) {
+//        int searchIndex = Arrays.binarySearch(storage, 0, size, resume, Resume::compareTo);
+//        int indexInStorage = -1 - searchIndex;
+        int indexInStorage = -1 - (int) object;
         if (storage[indexInStorage] != null) {
             System.arraycopy(storage, indexInStorage, storage, indexInStorage + 1, size - indexInStorage);
         }
@@ -23,8 +24,8 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void doDelete(String uuid) {
-        int index = (int) findSearchKey(String.valueOf(uuid));
+    protected void doDelete(Object uuid) {
+        int index = (int) uuid;
         size--;
         System.arraycopy(storage, index + 1, storage, index, size - index);
     }

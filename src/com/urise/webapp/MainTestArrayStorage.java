@@ -3,25 +3,29 @@ package com.urise.webapp;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.SortedArrayStorage;
+import com.urise.webapp.storage.MapUuidStorage;
 import com.urise.webapp.storage.Storage;
 
 /**
  * Test for your com.urise.webapp.storage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-//                        private static final Storage ARRAY_STORAGE = new ArrayStorage();
-    private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
+//                            private static final Storage ARRAY_STORAGE = new ArrayStorage();
+//    private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
 //    private static final Storage ARRAY_STORAGE = new ListStorage();
-//    private static final Storage ARRAY_STORAGE = new MapStorage();
+//    private static final Storage ARRAY_STORAGE = new MapResumeStorage();
+    private static final Storage ARRAY_STORAGE = new MapUuidStorage();
 
     public static void main(String[] args) {
 
-        Resume r3 = new Resume("uuid3");
-        Resume r1 = new Resume("uuid1");
-        Resume r2 = new Resume("uuid2");
+        Resume r3 = new Resume("uuid3", "Kozlov");
+        Resume r1 = new Resume("uuid1", "Kozlov");
+        Resume r2 = new Resume("uuid2", "Baranov");
+
 
         ARRAY_STORAGE.save(r2);
+        System.out.println("Get r2: " + ARRAY_STORAGE.get(r2.getUuid()));
+        System.out.println(r2.toString());
         ARRAY_STORAGE.save(r3);
         ARRAY_STORAGE.save(r1);
         try {
@@ -38,7 +42,6 @@ public class MainTestArrayStorage {
         printAll();
         System.out.println("Get r1: " + ARRAY_STORAGE.get(r1.getUuid()));
         System.out.println("Size: " + ARRAY_STORAGE.size());
-//        System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
 
         ARRAY_STORAGE.update(r2);
         ARRAY_STORAGE.update(r1);
@@ -55,8 +58,8 @@ public class MainTestArrayStorage {
 
     static void printAll() {
         System.out.println("\nGet All");
-        for (Resume r : ARRAY_STORAGE.getAll()) {
-            System.out.println(r);
+        for (Resume r : ARRAY_STORAGE.getAllSorted()) {
+            System.out.println(r.getUuid() + " " + r.getFullName());
         }
     }
 }

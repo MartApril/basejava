@@ -1,6 +1,6 @@
 package com.urise.webapp.storage;
 
-public class SortedArrayStorageTest extends AbstractArrayStorageTest {
+public class SortedArrayStorageTest extends AbstractStorageTest {
     public SortedArrayStorageTest() {
         super(new SortedArrayStorage());
     }
@@ -23,11 +23,6 @@ public class SortedArrayStorageTest extends AbstractArrayStorageTest {
     @Override
     public void update() {
         super.update();
-    }
-
-    @Override
-    public void getAll() {
-        super.getAll();
     }
 
     @Override

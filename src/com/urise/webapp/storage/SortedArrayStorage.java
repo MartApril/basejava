@@ -9,13 +9,11 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
     protected Object findSearchKey(String uuid) {
         Resume searchKey = new Resume(uuid);
-        return Arrays.binarySearch(storage, 0, size, searchKey);
+        return Arrays.binarySearch(storage, 0, size, searchKey, RESUME_COMPARATOR_UUID);
     }
 
     @Override
     protected void saveByIndex(Object object, Resume resume) {
-//        int searchIndex = Arrays.binarySearch(storage, 0, size, resume, Resume::compareTo);
-//        int indexInStorage = -1 - searchIndex;
         int indexInStorage = -1 - (int) object;
         if (storage[indexInStorage] != null) {
             System.arraycopy(storage, indexInStorage, storage, indexInStorage + 1, size - indexInStorage);

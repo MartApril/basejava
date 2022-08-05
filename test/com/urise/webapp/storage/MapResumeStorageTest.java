@@ -1,8 +1,8 @@
 package com.urise.webapp.storage;
 
-public class MapStorageTest extends AbstractArrayStorageTest {
-    public MapStorageTest() {
-        super(new MapStorage());
+public class MapResumeStorageTest extends AbstractStorageTest {
+    public MapResumeStorageTest() {
+        super(new MapResumeStorage());
     }
 
     @Override
@@ -23,11 +23,6 @@ public class MapStorageTest extends AbstractArrayStorageTest {
     @Override
     public void update() {
         super.update();
-    }
-
-    @Override
-    public void getAll() {
-        super.getAll();
     }
 
     @Override

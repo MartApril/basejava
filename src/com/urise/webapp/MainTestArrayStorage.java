@@ -10,7 +10,7 @@ import com.urise.webapp.storage.Storage;
  * Test for your com.urise.webapp.storage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-//                            private static final Storage ARRAY_STORAGE = new ArrayStorage();
+//    private static final Storage ARRAY_STORAGE = new ArrayStorage();
 //    private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
 //    private static final Storage ARRAY_STORAGE = new ListStorage();
 //    private static final Storage ARRAY_STORAGE = new MapResumeStorage();
@@ -18,14 +18,13 @@ public class MainTestArrayStorage {
 
     public static void main(String[] args) {
 
-        Resume r3 = new Resume("uuid3", "Kozlov");
-        Resume r1 = new Resume("uuid1", "Kozlov");
-        Resume r2 = new Resume("uuid2", "Baranov");
+        Resume r3 = new Resume("uuid3", "Ivanov");
+        Resume r1 = new Resume("uuid1", "Petrov");
+        Resume r2 = new Resume("uuid2", "Ivanov");
 
 
         ARRAY_STORAGE.save(r2);
-        System.out.println("Get r2: " + ARRAY_STORAGE.get(r2.getUuid()));
-        System.out.println(r2.toString());
+        System.out.println("Get r2: " + ARRAY_STORAGE.get(r2.getUuid())+" "+ r2.getFullName());
         ARRAY_STORAGE.save(r3);
         ARRAY_STORAGE.save(r1);
         try {

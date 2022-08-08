@@ -59,7 +59,4 @@ public class MapUuidStorageTest extends AbstractStorageTest {
         super.deleteNotExist();
     }
 
-    @Override
-    public void testOverflow() {
-    }
 }

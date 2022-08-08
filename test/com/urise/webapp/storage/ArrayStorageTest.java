@@ -1,8 +1,13 @@
 package com.urise.webapp.storage;
 
-public class ArrayStorageTest extends AbstractStorageTest {
+public class ArrayStorageTest extends AbstractArrayStorageTest {
     public ArrayStorageTest() {
         super(new ArrayStorage());
+    }
+
+    @Override
+    public void testOverflow() {
+        super.testOverflow();
     }
 
     @Override
@@ -60,8 +65,4 @@ public class ArrayStorageTest extends AbstractStorageTest {
         super.deleteNotExist();
     }
 
-    @Override
-    public void testOverflow() {
-        super.testOverflow();
-    }
 }

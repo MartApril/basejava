@@ -1,5 +1,6 @@
 package com.urise.webapp.model;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -19,14 +20,13 @@ public class Resume {
         this.fullName = UUID.randomUUID().toString();
     }
 
-    public Resume(String uuid) {
-        this.uuid = uuid;
-        this.fullName = UUID.randomUUID().toString();
+    public Resume(String fullName) {
+        this(UUID.randomUUID().toString(), fullName);
     }
 
     public Resume(String uuid, String fullName) {
-        this.uuid = uuid;
-        this.fullName = fullName;
+        this.uuid = Objects.requireNonNull(uuid);
+        this.fullName = Objects.requireNonNull(fullName);
     }
 
     public String getUuid() {

@@ -1,13 +1,24 @@
 package com.urise.webapp.storage;
 
-public class MapResumeStorageTest extends AbstractStorageTest {
-    public MapResumeStorageTest() {
-        super(new MapResumeStorage());
+import com.urise.webapp.exception.StorageException;
+import com.urise.webapp.model.Resume;
+import org.junit.Test;
+
+import static com.urise.webapp.storage.AbstractArrayStorage.STORAGE_LIMIT;
+import static org.junit.Assert.assertThrows;
+
+public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
+    protected AbstractArrayStorageTest(Storage storage) {
+        super(storage);
     }
 
-    @Override
-    public void setUp() {
-        super.setUp();
+    @Test
+    public void testOverflow() {
+        storage.clear();
+        for (int i = 0; i < STORAGE_LIMIT; i++) {
+            storage.save(new Resume());
+        }
+        assertThrows(StorageException.class, () -> storage.save(new Resume()));
     }
 
     @Override
@@ -32,6 +43,7 @@ public class MapResumeStorageTest extends AbstractStorageTest {
 
     @Override
     public void delete() {
+        super.delete();
     }
 
     @Override
@@ -58,5 +70,4 @@ public class MapResumeStorageTest extends AbstractStorageTest {
     public void deleteNotExist() {
         super.deleteNotExist();
     }
-
 }

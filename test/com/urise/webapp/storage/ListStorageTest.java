@@ -59,7 +59,4 @@ public class ListStorageTest extends AbstractStorageTest {
         super.deleteNotExist();
     }
 
-    @Override
-    public void testOverflow() {
-    }
 }

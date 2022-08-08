@@ -12,14 +12,7 @@ public class MapResumeStorage extends AbstractStorage {
 
     @Override
     protected boolean isExist(Object object) {
-        if (object != null) {
-            for (Map.Entry<String, Resume> entry : storage.entrySet()) {
-                if (entry.getKey().equals(object.toString())) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return object != null;
     }
 
     @Override
@@ -48,6 +41,11 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
+    protected List<Resume> doCopyAll() {
+        return new ArrayList<>(storage.values());
+    }
+
+    @Override
     public int size() {
         return storage.size();
     }
@@ -55,12 +53,5 @@ public class MapResumeStorage extends AbstractStorage {
     @Override
     public void clear() {
         storage.clear();
-    }
-
-    @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> resumes = new ArrayList<>(storage.values());
-        resumes.sort(RESUME_COMPARATOR_FULLNAME.thenComparing(RESUME_COMPARATOR_UUID));
-        return resumes;
     }
 }

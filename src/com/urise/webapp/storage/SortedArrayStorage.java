@@ -8,14 +8,14 @@ import java.util.UUID;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
-    protected Object findSearchKey(String uuid) {
+    protected Integer findSearchKey(String uuid) {
         Resume searchKey = new Resume(uuid, UUID.randomUUID().toString());
         return Arrays.binarySearch(storage, 0, size, searchKey, Comparator.comparing(Resume::getUuid));
     }
 
     @Override
-    protected void saveByIndex(Object object, Resume resume) {
-        int indexInStorage = -1 - (int) object;
+    protected void saveByIndex(Integer Integer, Resume resume) {
+        int indexInStorage = -1 - Integer;
         if (storage[indexInStorage] != null) {
             System.arraycopy(storage, indexInStorage, storage, indexInStorage + 1, size - indexInStorage);
         }
@@ -23,8 +23,8 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void doDelete(Object uuid) {
-        int index = (int) uuid;
+    protected void doDelete(Integer uuid) {
+        int index = uuid;
         size--;
         System.arraycopy(storage, index + 1, storage, index, size - index);
     }

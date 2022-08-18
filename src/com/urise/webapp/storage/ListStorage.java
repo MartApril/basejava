@@ -5,16 +5,16 @@ import com.urise.webapp.model.Resume;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListStorage extends AbstractStorage {
+public class ListStorage extends AbstractStorage<Integer>{
     protected final List<Resume> storage = new ArrayList<>();
 
     @Override
-    protected boolean isExist(Object object) {
-        return object != null;
+    protected boolean isExist(Integer searchKey) {
+        return searchKey != null;
     }
 
     @Override
-    protected Object findSearchKey(String uuid) {
+    protected Integer findSearchKey(String uuid) {
         for (int i = 0; i < storage.size(); i++) {
             if (storage.get(i).getUuid().equals(uuid)) {
                 return i;
@@ -24,30 +24,30 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doUpdate(Object object, Resume resume) {
+    protected void doUpdate(Integer searchKey, Resume resume) {
         storage.remove(resume);
-        storage.add((int) object, resume);
+        storage.add(searchKey, resume);
     }
 
     @Override
-    protected void doSave(Object object, Resume resume) {
+    protected void doSave(Integer searchKey, Resume resume) {
         storage.add(resume);
     }
 
     @Override
-    protected Resume doGet(Object uuid) {
-        return storage.get((Integer) uuid);
+    protected Resume doGet(Integer uuid) {
+        return storage.get(uuid);
     }
 
     @Override
-    protected void doDelete(Object uuid) {
-        Resume resume = storage.get((Integer) uuid);
+    protected void doDelete(Integer uuid) {
+        Resume resume = storage.get(uuid);
         storage.remove(resume);
     }
 
     @Override
     protected List<Resume> doCopyAll() {
-        return new ArrayList<>(List.copyOf(storage));
+        return new ArrayList<>(storage);
     }
 
     @Override

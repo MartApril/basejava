@@ -3,7 +3,7 @@ package com.urise.webapp;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.MapUuidStorage;
+import com.urise.webapp.storage.MapResumeStorage;
 import com.urise.webapp.storage.Storage;
 
 /**
@@ -13,15 +13,14 @@ public class MainTestArrayStorage {
 //    private static final Storage ARRAY_STORAGE = new ArrayStorage();
 //    private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
 //    private static final Storage ARRAY_STORAGE = new ListStorage();
-//    private static final Storage ARRAY_STORAGE = new MapResumeStorage();
-    private static final Storage ARRAY_STORAGE = new MapUuidStorage();
+    private static final Storage ARRAY_STORAGE = new MapResumeStorage();
+//    private static final Storage ARRAY_STORAGE = new MapUuidStorage();
 
     public static void main(String[] args) {
 
         Resume r3 = new Resume("uuid3", "Ivanov");
         Resume r1 = new Resume("uuid1", "Petrov");
         Resume r2 = new Resume("uuid2", "Ivanov");
-
 
         ARRAY_STORAGE.save(r2);
         System.out.println("Get r2: " + ARRAY_STORAGE.get(r2.getUuid())+" "+ r2.getFullName());

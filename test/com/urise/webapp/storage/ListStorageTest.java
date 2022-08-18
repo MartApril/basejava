@@ -6,6 +6,11 @@ public class ListStorageTest extends AbstractStorageTest {
     }
 
     @Override
+    public void getAllStorage() {
+        super.getAllStorage();
+    }
+
+    @Override
     public void setUp() {
         super.setUp();
     }

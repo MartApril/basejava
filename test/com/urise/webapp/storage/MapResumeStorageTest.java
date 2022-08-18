@@ -59,4 +59,8 @@ public class MapResumeStorageTest extends AbstractStorageTest {
         super.deleteNotExist();
     }
 
+    @Override
+    public void getAllStorage() {
+        super.getAllStorage();
+    }
 }

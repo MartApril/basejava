@@ -1,5 +1,6 @@
 package com.urise.webapp.model;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -11,13 +12,28 @@ public class Resume {
     private final String uuid;
     private final String fullName;
 
-    public String getFullName() {
-        return fullName;
+    private Map<SectionType, AbstractSection> sections;
+    private Map<ContactType, String> contacts;
+
+    public Map<SectionType, AbstractSection> getSections() {
+        return sections;
     }
 
-    public Resume() {
-        this.uuid = UUID.randomUUID().toString();
-        this.fullName = UUID.randomUUID().toString();
+    public Map<ContactType, String> getContacts() {
+        return contacts;
+    }
+
+    public void setSections(Map<SectionType, AbstractSection> sections) {
+        this.sections = sections;
+    }
+
+    public void setContacts(Map<ContactType, String> contacts) {
+        this.contacts = contacts;
+    }
+
+
+    public String getFullName() {
+        return fullName;
     }
 
     public Resume(String fullName) {
@@ -25,8 +41,8 @@ public class Resume {
     }
 
     public Resume(String uuid, String fullName) {
-        this.uuid = Objects.requireNonNull(uuid);
-        this.fullName = Objects.requireNonNull(fullName);
+        this.uuid = Objects.requireNonNull(uuid, "uuid must not be null");
+        this.fullName = Objects.requireNonNull(fullName, "fullname must not be null");
     }
 
     public String getUuid() {
@@ -40,16 +56,19 @@ public class Resume {
 
         Resume resume = (Resume) o;
 
-        return uuid.equals(resume.uuid);
+        if (!uuid.equals(resume.uuid)) return false;
+        return fullName.equals(resume.fullName);
     }
 
     @Override
     public int hashCode() {
-        return uuid.hashCode();
+        int result = uuid.hashCode();
+        result = 31 * result + fullName.hashCode();
+        return result;
     }
 
     @Override
     public String toString() {
-        return uuid;
+        return "Resume uuid: " + uuid + '\n' + fullName;
     }
 }

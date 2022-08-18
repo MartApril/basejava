@@ -12,13 +12,18 @@ public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
         super(storage);
     }
 
+    @Override
+    public void getAllStorage() {
+        super.getAllStorage();
+    }
+
     @Test
     public void testOverflow() {
         storage.clear();
         for (int i = 0; i < STORAGE_LIMIT; i++) {
-            storage.save(new Resume());
+            storage.save(new Resume("Name "+i));
         }
-        assertThrows(StorageException.class, () -> storage.save(new Resume()));
+        assertThrows(StorageException.class, () -> storage.save(new Resume("Overflow")));
     }
 
     @Override

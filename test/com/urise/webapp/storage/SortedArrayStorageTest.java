@@ -11,6 +11,11 @@ public class SortedArrayStorageTest extends AbstractArrayStorageTest {
     }
 
     @Override
+    public void getAllStorage() {
+        super.getAllStorage();
+    }
+
+    @Override
     public void setUp() {
         super.setUp();
     }

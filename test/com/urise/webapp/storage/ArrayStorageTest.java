@@ -6,6 +6,11 @@ public class ArrayStorageTest extends AbstractArrayStorageTest {
     }
 
     @Override
+    public void getAllStorage() {
+        super.getAllStorage();
+    }
+
+    @Override
     public void testOverflow() {
         super.testOverflow();
     }

@@ -5,6 +5,18 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class MainFile {
+public static void readAllFiles (File fileOrDirectory) {
+    File[] arrayOfFiles = fileOrDirectory.listFiles();
+    for (File file : arrayOfFiles) {
+        if (file.isFile()) {
+            System.out.println(file.getName()+ " " + file.getAbsolutePath());
+        }
+        if (file.isDirectory()) {
+            readAllFiles(file);
+        }
+    }
+}
+
     public static void main(String[] args) {
         String filePath = ".\\.gitignore";
 
@@ -29,5 +41,7 @@ public class MainFile {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        readAllFiles(dir);
     }
 }

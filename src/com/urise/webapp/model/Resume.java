@@ -13,15 +13,17 @@ public class Resume {
     private final String uuid;
     private final String fullName;
 
-    private Map<SectionType, AbstractSection> sections=new EnumMap<SectionType, AbstractSection>(SectionType.class);
-    private Map<ContactType, String> contacts= new EnumMap<ContactType, String>(ContactType.class);
+    private Map<SectionType, AbstractSection> sections = new EnumMap<SectionType, AbstractSection>(SectionType.class);
+    private Map<ContactType, String> contacts = new EnumMap<ContactType, String>(ContactType.class);
 
     public String getContact(ContactType type) {
         return contacts.get(type);
     }
+
     public AbstractSection getSection(SectionType type) {
         return sections.get(type);
     }
+
     public Map<SectionType, AbstractSection> getSections() {
         return sections;
     }

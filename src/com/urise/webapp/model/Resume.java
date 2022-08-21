@@ -19,7 +19,7 @@ public class Resume {
     public String getContact(ContactType type) {
         return contacts.get(type);
     }
-    public AbstractSection getContact(SectionType type) {
+    public AbstractSection getSection(SectionType type) {
         return sections.get(type);
     }
     public Map<SectionType, AbstractSection> getSections() {

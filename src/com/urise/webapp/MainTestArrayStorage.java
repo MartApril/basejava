@@ -3,19 +3,22 @@ package com.urise.webapp;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.MapResumeStorage;
-import com.urise.webapp.storage.Storage;
+import com.urise.webapp.storage.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Test for your com.urise.webapp.storage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-//    private static final Storage ARRAY_STORAGE = new ArrayStorage();
-//    private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
-//    private static final Storage ARRAY_STORAGE = new ListStorage();
-    private static final Storage ARRAY_STORAGE = new MapResumeStorage();
-//    private static final Storage ARRAY_STORAGE = new MapUuidStorage();
-
+//        private static final Storage ARRAY_STORAGE = new ArrayStorage();
+    //    private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
+    //    private static final Storage ARRAY_STORAGE = new ListStorage();
+    //    private static final Storage ARRAY_STORAGE = new MapResumeStorage();
+        private static final Storage ARRAY_STORAGE = new MapUuidStorage();
     public static void main(String[] args) {
 
         Resume r3 = new Resume("uuid3", "Ivanov");
@@ -23,7 +26,7 @@ public class MainTestArrayStorage {
         Resume r2 = new Resume("uuid2", "Ivanov");
 
         ARRAY_STORAGE.save(r2);
-        System.out.println("Get r2: " + ARRAY_STORAGE.get(r2.getUuid())+" "+ r2.getFullName());
+        System.out.println("Get r2: " + ARRAY_STORAGE.get(r2.getUuid()) + " " + r2.getFullName());
         ARRAY_STORAGE.save(r3);
         ARRAY_STORAGE.save(r1);
         try {
@@ -49,9 +52,11 @@ public class MainTestArrayStorage {
         ARRAY_STORAGE.delete(r2.getUuid());
         printAll();
 
-        ARRAY_STORAGE.clear();
+//        ARRAY_STORAGE.clear();
         printAll();
         System.out.println("Size: " + ARRAY_STORAGE.size());
+
+
     }
 
     static void printAll() {

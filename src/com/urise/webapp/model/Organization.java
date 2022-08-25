@@ -1,10 +1,19 @@
 package com.urise.webapp.model;
 
+import com.urise.webapp.util.DateUtil;
+
+import javax.management.monitor.Monitor;
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import java.util.Objects;
 
-public class Organization extends OrganizationSection {
+import static com.urise.webapp.util.DateUtil.NOW;
+import static com.urise.webapp.util.DateUtil.of;
+
+public class Organization extends OrganizationSection implements Serializable{
+    private static final long serialVersionUID = 1L;
     private String title;
     private String website;
     private List<Period> periods;
@@ -47,7 +56,7 @@ public class Organization extends OrganizationSection {
                 ", " + periods;
     }
 
-    public static class Period {
+    public static class Period implements Serializable {
         private final String title;
         private final LocalDate start;
         private final LocalDate end;
@@ -61,6 +70,13 @@ public class Organization extends OrganizationSection {
             this.start = start;
             this.end = end;
             this.description = description;
+        }
+        public Period(String title,int startYear, Month startMonth,  String description) {
+            this(title, of(startYear, startMonth), NOW, description);
+        }
+
+        public Period(String title,int startYear, Month startMonth, int endYear, Month endMonth, String description) {
+            this(title, of(startYear, startMonth),of(endYear, endMonth), description);
         }
 
         @Override

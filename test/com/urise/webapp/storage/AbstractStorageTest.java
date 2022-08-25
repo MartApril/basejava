@@ -7,12 +7,14 @@ import com.urise.webapp.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
+    protected static final File STORAGE_DIR= new File("C:/Users/Anna/IdeaProjects/basejava/storage");
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
@@ -64,7 +66,8 @@ public abstract class AbstractStorageTest {
         Resume resume = new Resume(UUID_1, "New name");
         storage.update(resume);
         assertGet(resume);
-        assertSame(resume, storage.get(UUID_1));
+        assertTrue(resume.equals(storage.get(UUID_1)));
+//        assertSame(resume, storage.get(UUID_1));
     }
 
     @Test

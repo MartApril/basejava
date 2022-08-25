@@ -8,7 +8,6 @@ import java.util.List;
  * Array based storage for Resumes
  */
 public interface Storage {
-
     void clear();
 
     void update(Resume resume);

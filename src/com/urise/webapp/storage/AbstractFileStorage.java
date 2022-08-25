@@ -3,16 +3,17 @@ package com.urise.webapp.storage;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
+public abstract class AbstractFileStorage extends AbstractStorage<File>   {
     private final File directory;
+    StorageStrategy storageStrategy;
 
-    protected AbstractFileStorage(File directory) {
+    protected AbstractFileStorage(File directory, StorageStrategy storageStrategy) {
         Objects.requireNonNull(directory, "directory must not be null");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + "is not directory");
@@ -21,11 +22,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
             throw new IllegalArgumentException(directory.getAbsolutePath() + "is not readable/writable");
         }
         this.directory = directory;
+        this.storageStrategy=storageStrategy;
     }
 
-    protected abstract Resume doRead(File file) throws IOException;
-
-    protected abstract void doWrite(Resume resume, File file) throws IOException;
+//    protected abstract Resume doRead(InputStream inputStream) throws IOException;
+//    protected abstract void doWrite(Resume resume, OutputStream  outputStream) throws IOException;
 
     @Override
     protected boolean isExist(File file) {
@@ -40,51 +41,49 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected void doUpdate(File file, Resume resume) {
         try {
-            doWrite(resume, file);
+            storageStrategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
+            throw new StorageException("File write error", resume.getUuid(), e);
         }
     }
 
     @Override
-    protected void doSave(File file, Resume resume) {
+    public void doSave(File file, Resume resume) {
         try {
             file.createNewFile();
-            doWrite(resume, file);
         } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
+            throw new StorageException("Couldn't create file " + file.getAbsolutePath(), file.getName(), e);
         }
+        doUpdate(file, resume);
     }
 
     @Override
     protected Resume doGet(File file) {
         try {
-            return doRead(file);
+            return storageStrategy.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
+            throw new StorageException("File read error", file.getName(), e);
         }
     }
 
     @Override
     protected void doDelete(File file) {
         if (!file.delete()) {
-            throw new StorageException("IO error", file.getName());
+            throw new StorageException("File delete error", file.getName());
         }
     }
 
     @Override
     protected List<Resume> doCopyAll() {
-        List<Resume> resumes = new ArrayList<>();
         File[] files = directory.listFiles();
-        isNull(files);
-        for (File file : files) {
-            try {
-                resumes.add(doRead(file));
-            } catch (IOException e) {
-                throw new StorageException("IO error", file.getName());
-            }
+        if (files == null) {
+            throw new StorageException("Directory read error", null);
         }
-        return resumes;
+        List<Resume> list = new ArrayList<>(files.length);
+        for (File file : files) {
+            list.add(doGet(file));
+        }
+        return list;
     }
 
     @Override
@@ -92,9 +91,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         File[] files = directory.listFiles();
         isNull(files);
         for (File file : files) {
-            if (!file.delete()) {
-                throw new StorageException("IO error", file.getName());
-            }
+            doDelete(file);
         }
     }
 

@@ -4,23 +4,24 @@ import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.*;
+import com.urise.webapp.storage.serialization.ObjectStreamStorage;
+import com.urise.webapp.storage.serialization.PathStorage;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * Test for your com.urise.webapp.storage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-//        private static final Storage ARRAY_STORAGE = new ArrayStorage();
+    //        private static final Storage ARRAY_STORAGE = new ArrayStorage();
     //    private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
     //    private static final Storage ARRAY_STORAGE = new ListStorage();
     //    private static final Storage ARRAY_STORAGE = new MapResumeStorage();
-        private static final Storage ARRAY_STORAGE = new MapUuidStorage();
-    public static void main(String[] args) {
+//        private static final Storage ARRAY_STORAGE = new MapUuidStorage();
+    private static final File STORAGE_DIR = new File("C:/Users/Anna/IdeaProjects/basejava/storage");
+    private static final Storage ARRAY_STORAGE = new PathStorage(STORAGE_DIR, new ObjectStreamStorage(STORAGE_DIR));
 
+    public static void main(String[] args) {
         Resume r3 = new Resume("uuid3", "Ivanov");
         Resume r1 = new Resume("uuid1", "Petrov");
         Resume r2 = new Resume("uuid2", "Ivanov");
@@ -55,8 +56,6 @@ public class MainTestArrayStorage {
 //        ARRAY_STORAGE.clear();
         printAll();
         System.out.println("Size: " + ARRAY_STORAGE.size());
-
-
     }
 
     static void printAll() {

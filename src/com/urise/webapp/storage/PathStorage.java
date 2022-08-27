@@ -1,4 +1,4 @@
-package com.urise.webapp.storage.serialization;
+package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
@@ -8,6 +8,7 @@ import com.urise.webapp.storage.StreamSerializer;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,11 +16,7 @@ import java.util.stream.Collectors;
 
 public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
-    private StreamSerializer streamSerializer;
-
-    public PathStorage(File dir) {
-        this.directory = dir.toPath();
-    }
+    private final StreamSerializer streamSerializer;
 
     public PathStorage(File dir, StreamSerializer streamSerializer) {
         this.directory = dir.toPath();
@@ -37,8 +34,7 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected Path findSearchKey(String uuid) {
-        File file = new File(String.valueOf(directory), uuid);
-        return file.toPath();
+        return directory.resolve(uuid);
     }
 
     @Override

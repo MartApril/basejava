@@ -4,8 +4,8 @@ import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.*;
-import com.urise.webapp.storage.serialization.ObjectStreamStorage;
-import com.urise.webapp.storage.serialization.PathStorage;
+import com.urise.webapp.storage.serializer.ObjectStreamStorage;
+import com.urise.webapp.storage.PathStorage;
 
 import java.io.File;
 
@@ -19,7 +19,7 @@ public class MainTestArrayStorage {
     //    private static final Storage ARRAY_STORAGE = new MapResumeStorage();
 //        private static final Storage ARRAY_STORAGE = new MapUuidStorage();
     private static final File STORAGE_DIR = new File("C:/Users/Anna/IdeaProjects/basejava/storage");
-    private static final Storage ARRAY_STORAGE = new PathStorage(STORAGE_DIR, new ObjectStreamStorage(STORAGE_DIR));
+    private static final Storage ARRAY_STORAGE = new PathStorage(STORAGE_DIR, new ObjectStreamStorage());
 
     public static void main(String[] args) {
         Resume r3 = new Resume("uuid3", "Ivanov");

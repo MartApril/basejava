@@ -1,9 +1,7 @@
-package com.urise.webapp.storage.serialization;
+package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.AbstractStorage;
-import com.urise.webapp.storage.StreamSerializer;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -12,11 +10,7 @@ import java.util.Objects;
 
 public class FileStorage extends AbstractStorage<File> {
     private final File directory;
-    private StreamSerializer streamSerializer;
-
-    public FileStorage(File directory) {
-        this.directory = directory;
-    }
+    private final StreamSerializer streamSerializer;
 
     public FileStorage(File directory, StreamSerializer streamSerializer) {
         Objects.requireNonNull(directory, "directory must not be null");
@@ -50,7 +44,7 @@ public class FileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    public void doSave(File file, Resume resume) {
+    protected void doSave(File file, Resume resume) {
         try {
             file.createNewFile();
         } catch (IOException e) {
@@ -77,7 +71,7 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> doCopyAll() {
-        File[] files = isNull(directory.listFiles());
+        File[] files = toFilesArray();
         List<Resume> list = new ArrayList<>(files.length);
         for (File file : files) {
             list.add(doGet(file));
@@ -87,7 +81,7 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        File[] files = isNull(directory.listFiles());
+        File[] files = toFilesArray();
         for (File file : files) {
             doDelete(file);
         }
@@ -95,12 +89,13 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public int size() {
-        return isNull(directory.listFiles()).length;
+        return toFilesArray().length;
     }
 
-    private File[] isNull(File[] files) {
+    private File[] toFilesArray() {
+        File[] files = directory.listFiles();
         if (files == null) {
-            throw new StorageException("IO error", directory.getName());
+            throw new StorageException("Directory is null", directory.getName());
         }
         return files;
     }

@@ -1,8 +1,10 @@
 package com.urise.webapp.model;
 
-import com.urise.webapp.util.DateUtil;
+import com.urise.webapp.util.LocalDateAdapter;
 
-import javax.management.monitor.Monitor;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
@@ -17,6 +19,33 @@ public class Organization extends OrganizationSection implements Serializable{
     private String title;
     private String website;
     private List<Period> periods;
+
+    public Organization() {
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public List<Period> getPeriods() {
+        return periods;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public void setPeriods(List<Period> periods) {
+        this.periods = periods;
+    }
 
     public Organization(List<Organization> organizations) {
         super(organizations);
@@ -55,12 +84,17 @@ public class Organization extends OrganizationSection implements Serializable{
                 ", '" + website + '\'' +
                 ", " + periods;
     }
-
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class Period implements Serializable {
-        private final String title;
-        private final LocalDate start;
-        private final LocalDate end;
-        private final String description;
+        private String title;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private LocalDate start;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private LocalDate end;
+        private String description;
+
+        public Period() {
+        }
 
         public Period(String title, LocalDate start, LocalDate end, String description) {
             Objects.requireNonNull(start, "start must not be null");
@@ -77,6 +111,38 @@ public class Organization extends OrganizationSection implements Serializable{
 
         public Period(String title,int startYear, Month startMonth, int endYear, Month endMonth, String description) {
             this(title, of(startYear, startMonth),of(endYear, endMonth), description);
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public LocalDate getStart() {
+            return start;
+        }
+
+        public LocalDate getEnd() {
+            return end;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public void setStart(LocalDate start) {
+            this.start = start;
+        }
+
+        public void setEnd(LocalDate end) {
+            this.end = end;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
         }
 
         @Override

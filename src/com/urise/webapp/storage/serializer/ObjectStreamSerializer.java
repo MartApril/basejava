@@ -2,12 +2,10 @@ package com.urise.webapp.storage.serializer;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.StreamSerializer;
-import com.urise.webapp.storage.FileStorage;
 
 import java.io.*;
 
-public class ObjectStreamStorage implements StreamSerializer {
+public class ObjectStreamSerializer implements StreamSerializer {
 
     @Override
     public Resume doRead(InputStream inputStream) throws IOException {

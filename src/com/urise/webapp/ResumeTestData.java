@@ -72,9 +72,9 @@ public class ResumeTestData {
         for (Map.Entry<ContactType, String> entry : mapContacts.entrySet()) {
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }
-        for (Map.Entry<SectionType, AbstractSection> entry : mapSections.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
+//        for (Map.Entry<SectionType, AbstractSection> entry : mapSections.entrySet()) {
+//            System.out.println(entry.getKey() + ": " + entry.getValue());
+//        }
 
         return resume;
     }

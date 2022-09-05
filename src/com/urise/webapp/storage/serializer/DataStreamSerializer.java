@@ -4,11 +4,9 @@ import com.urise.webapp.model.*;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static com.urise.webapp.model.Organization.*;
+import static com.urise.webapp.model.Organization.Period;
 
 public class DataStreamSerializer implements StreamSerializer {
 
@@ -31,7 +29,6 @@ public class DataStreamSerializer implements StreamSerializer {
                     case OBJECTIVE:
                     case PERSONAL:
                         abstractSection = new TextSection(dis.readUTF());
-                        System.out.println("obj or pers");
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
@@ -92,37 +89,68 @@ public class DataStreamSerializer implements StreamSerializer {
                     case OBJECTIVE:
                     case PERSONAL:
                         dos.writeUTF(String.valueOf(entry.getValue()));
-                        System.out.println("obj or pers");
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         ListSection ls = (ListSection) entry.getValue();
                         List<String> stringList = ls.getStrings();
                         dos.writeInt(stringList.size());
-                        for (String string : stringList) {
-                            dos.writeUTF(string);
-                        }
+                        writeWithException(stringList, dos, collection -> {
+                            for (String s : stringList) {
+                                dos.writeUTF(s);
+                            }
+                        });
+//                        ListSection ls = (ListSection) entry.getValue();
+//                        List<String> stringList = ls.getStrings();
+//                        dos.writeInt(stringList.size());
+//                        for (String string : stringList) {
+//                            dos.writeUTF(string);
+//                        }
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
                         OrganizationSection os = (OrganizationSection) entry.getValue();
                         List<Organization> organizationList = os.getOrganizations();
                         dos.writeInt(organizationList.size());
-                        for (Organization organization : organizationList) {
-                            dos.writeUTF(organization.getTitle());
-                            dos.writeUTF(organization.getWebsite());
-                            List<Period> periodList = organization.getPeriods();
-                            dos.writeInt(periodList.size());
-                            for (Period period : periodList) {
-                                dos.writeUTF(period.getTitle());
-                                dos.writeUTF(String.valueOf(period.getStart()));
-                                dos.writeUTF(String.valueOf(period.getEnd()));
-                                dos.writeUTF(period.getDescription());
+                        writeWithException(organizationList, dos, collection -> {
+                            for (Organization organization : organizationList) {
+                                dos.writeUTF(organization.getTitle());
+                                dos.writeUTF(organization.getWebsite());
+                                List<Period> periodList = organization.getPeriods();
+                                dos.writeInt(periodList.size());
+                                for (Period period : periodList) {
+                                    dos.writeUTF(period.getTitle());
+                                    dos.writeUTF(String.valueOf(period.getStart()));
+                                    dos.writeUTF(String.valueOf(period.getEnd()));
+                                    dos.writeUTF(period.getDescription());
+                                }
                             }
-                        }
+                        } );
+
+//                        for (Organization organization : organizationList) {
+//                            dos.writeUTF(organization.getTitle());
+//                            dos.writeUTF(organization.getWebsite());
+//                            List<Period> periodList = organization.getPeriods();
+//                            dos.writeInt(periodList.size());
+//                            for (Period period : periodList) {
+//                                dos.writeUTF(period.getTitle());
+//                                dos.writeUTF(String.valueOf(period.getStart()));
+//                                dos.writeUTF(String.valueOf(period.getEnd()));
+//                                dos.writeUTF(period.getDescription());
+//                            }
+//                        }
                         break;
                 }
             }
         }
+    }
+
+    private void writeWithException(Collection collection, DataOutputStream dos, Consumer<Collection> collectionConsumer) throws IOException {
+        collectionConsumer.writeCollection(collection);
+    }
+
+    @FunctionalInterface
+    interface Consumer<Collection> {
+        void writeCollection(Collection collection) throws IOException;
     }
 }

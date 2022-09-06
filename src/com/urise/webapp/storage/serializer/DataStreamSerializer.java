@@ -46,15 +46,21 @@ public class DataStreamSerializer implements StreamSerializer {
                         for (int j = 0; j < sizeOfOrganizations; j++) {
                             Organization organization = new Organization();
                             organization.setTitle(dis.readUTF());
-                            organization.setWebsite(dis.readUTF());
-                            int sizeOfPeriods = dis.readInt();
+                            boolean isWebsiteNull = dis.readBoolean();
+                            if (!isWebsiteNull) {
+                                organization.setWebsite(dis.readUTF());
+                            }
                             List<Period> periodList = new ArrayList<>();
+                            int sizeOfPeriods = dis.readInt();
                             for (int l = 0; l < sizeOfPeriods; l++) {
                                 Period period = new Period();
                                 period.setTitle(dis.readUTF());
                                 period.setStart(LocalDate.parse(dis.readUTF()));
                                 period.setEnd(LocalDate.parse(dis.readUTF()));
-                                period.setDescription(dis.readUTF());
+                                boolean isDescriptionNull = dis.readBoolean();
+                                if (!isDescriptionNull) {
+                                    period.setDescription(dis.readUTF());
+                                }
                                 periodList.add(period);
                             }
                             organization.setPeriods(periodList);
@@ -95,7 +101,7 @@ public class DataStreamSerializer implements StreamSerializer {
                         ListSection ls = (ListSection) entry.getValue();
                         List<String> stringList = ls.getStrings();
                         dos.writeInt(stringList.size());
-                        writeWithException(stringList, dos, collection -> {
+                        writeWithException(stringList, dos, o -> {
                             for (String s : stringList) {
                                 dos.writeUTF(s);
                             }
@@ -112,20 +118,30 @@ public class DataStreamSerializer implements StreamSerializer {
                         OrganizationSection os = (OrganizationSection) entry.getValue();
                         List<Organization> organizationList = os.getOrganizations();
                         dos.writeInt(organizationList.size());
-                        writeWithException(organizationList, dos, collection -> {
+                        writeWithException(organizationList, dos, o -> {
                             for (Organization organization : organizationList) {
                                 dos.writeUTF(organization.getTitle());
-                                dos.writeUTF(organization.getWebsite());
+                                if (organization.getWebsite() == null) {
+                                    dos.writeBoolean(false);
+                                } else {
+                                    dos.writeBoolean(true);
+                                    dos.writeUTF(organization.getWebsite());
+                                }
                                 List<Period> periodList = organization.getPeriods();
                                 dos.writeInt(periodList.size());
                                 for (Period period : periodList) {
                                     dos.writeUTF(period.getTitle());
                                     dos.writeUTF(String.valueOf(period.getStart()));
                                     dos.writeUTF(String.valueOf(period.getEnd()));
-                                    dos.writeUTF(period.getDescription());
+                                    if (period.getDescription() == null) {
+                                        dos.writeBoolean(false);
+                                    } else {
+                                        dos.writeBoolean(true);
+                                        dos.writeUTF(period.getDescription());
+                                    }
                                 }
                             }
-                        } );
+                        });
 
 //                        for (Organization organization : organizationList) {
 //                            dos.writeUTF(organization.getTitle());
@@ -145,12 +161,12 @@ public class DataStreamSerializer implements StreamSerializer {
         }
     }
 
-    private void writeWithException(Collection collection, DataOutputStream dos, Consumer<Collection> collectionConsumer) throws IOException {
-        collectionConsumer.writeCollection(collection);
+    private void writeWithException(Collection collection, DataOutputStream dos, Writer<Collection> writer) throws IOException {
+        writer.writeCollection(collection);
     }
 
     @FunctionalInterface
-    interface Consumer<Collection> {
+    interface Writer<Collection> {
         void writeCollection(Collection collection) throws IOException;
     }
 }

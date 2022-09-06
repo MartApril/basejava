@@ -73,7 +73,7 @@ public abstract class AbstractStorageTest {
     public void save() {
         storage.save(RESUME_4);
         assertSize(4);
-        assertGet(RESUME_4);
+//        assertGet(RESUME_4);
 //        Resume[] expected = {RESUME_1, RESUME_2, RESUME_3, RESUME_4};
 //        assertArray(expected);
     }

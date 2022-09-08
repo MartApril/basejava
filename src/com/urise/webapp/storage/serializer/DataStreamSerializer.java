@@ -1,12 +1,13 @@
 package com.urise.webapp.storage.serializer;
 
 import com.urise.webapp.model.*;
+import com.urise.webapp.model.Organization.Period;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.*;
-
-import static com.urise.webapp.model.Organization.Period;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class DataStreamSerializer implements StreamSerializer {
 
@@ -16,13 +17,12 @@ public class DataStreamSerializer implements StreamSerializer {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            int size = dis.readInt();
-            for (int i = 0; i < size; i++) {
+            readWithException(dis, () -> {
                 resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-            }
+                System.out.println("work read");
+            });
             //read sections
-            int sizeOfSections = dis.readInt();
-            for (int i = 0; i < sizeOfSections; i++) {
+            readWithException(dis, () -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 AbstractSection abstractSection = null;
                 switch (sectionType) {
@@ -33,44 +33,56 @@ public class DataStreamSerializer implements StreamSerializer {
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         List<String> stringList = new ArrayList<>();
-                        int sizeOfStrings = dis.readInt();
-                        for (int k = 0; k < sizeOfStrings; k++) {
+                        readWithException(dis, () -> {
                             stringList.add(dis.readUTF());
-                        }
+                            System.out.println("work readList");
+                        });
                         abstractSection = new ListSection(stringList);
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
                         List<Organization> organizationList = new ArrayList<>();
-                        int sizeOfOrganizations = dis.readInt();
-                        for (int j = 0; j < sizeOfOrganizations; j++) {
+                        readWithException(dis, () -> {
                             Organization organization = new Organization();
                             organization.setTitle(dis.readUTF());
                             boolean isWebsiteNull = dis.readBoolean();
                             if (!isWebsiteNull) {
                                 organization.setWebsite(dis.readUTF());
                             }
+                            System.out.println("work readorg1");
                             List<Period> periodList = new ArrayList<>();
-                            int sizeOfPeriods = dis.readInt();
-                            for (int l = 0; l < sizeOfPeriods; l++) {
-                                Period period = new Period();
-                                period.setTitle(dis.readUTF());
-                                period.setStart(LocalDate.parse(dis.readUTF()));
-                                period.setEnd(LocalDate.parse(dis.readUTF()));
-                                boolean isDescriptionNull = dis.readBoolean();
-                                if (!isDescriptionNull) {
-                                    period.setDescription(dis.readUTF());
-                                }
-                                periodList.add(period);
-                            }
+
+//                            organization.setPeriods(readReturnsList(dis, periodList, () -> {
+//                                Period period = new Period();
+//                                period.setTitle(dis.readUTF());
+//                                period.setStart(LocalDate.parse(dis.readUTF()));
+//                                period.setEnd(LocalDate.parse(dis.readUTF()));
+//                                boolean isDescriptionNull = dis.readBoolean();
+//                                if (!isDescriptionNull) {
+//                                    period.setDescription(dis.readUTF());
+//                                }
+//                                periodList.add(period);
+//                            }));
+                                readWithException(dis, () -> {
+                                    Period period = new Period();
+                                    period.setTitle(dis.readUTF());
+                                    period.setStart(LocalDate.parse(dis.readUTF()));
+                                    period.setEnd(LocalDate.parse(dis.readUTF()));
+                                    boolean isDescriptionNull = dis.readBoolean();
+                                    if (!isDescriptionNull) {
+                                        period.setDescription(dis.readUTF());
+                                    }
+                                    periodList.add(period);
+                                });
                             organization.setPeriods(periodList);
                             organizationList.add(organization);
-                        }
+                            System.out.println("work readOrg");
+                        });
                         abstractSection = new OrganizationSection(organizationList);
                         break;
                 }
                 resume.addSection(sectionType, abstractSection);
-            }
+            });
             return resume;
         }
     }
@@ -80,93 +92,81 @@ public class DataStreamSerializer implements StreamSerializer {
         try (DataOutputStream dos = new DataOutputStream(outputStream)) {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
-            Map<ContactType, String> contacts = resume.getContacts();
-            dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
-                dos.writeUTF(entry.getKey().name());
-                dos.writeUTF(entry.getValue());
-            }
+            writeWithException(dos, resume.getContacts().entrySet(), writer -> {
+                dos.writeUTF(writer.getKey().name());
+                dos.writeUTF(writer.getValue());
+            });
             //write sections
-            Map<SectionType, AbstractSection> sections = resume.getSections();
-            dos.writeInt(sections.size());
-            for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
-                dos.writeUTF(entry.getKey().name());
-                switch (entry.getKey()) {
+            writeWithException(dos, resume.getSections().entrySet(), writer0 -> {
+                dos.writeUTF(writer0.getKey().name());
+                switch (writer0.getKey()) {
                     case OBJECTIVE:
                     case PERSONAL:
-                        dos.writeUTF(String.valueOf(entry.getValue()));
+                        dos.writeUTF(String.valueOf(writer0.getValue()));
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        ListSection ls = (ListSection) entry.getValue();
-                        List<String> stringList = ls.getStrings();
-                        dos.writeInt(stringList.size());
-                        writeWithException(stringList, dos, o -> {
-                            for (String s : stringList) {
-                                dos.writeUTF(s);
-                            }
-                        });
-//                        ListSection ls = (ListSection) entry.getValue();
-//                        List<String> stringList = ls.getStrings();
-//                        dos.writeInt(stringList.size());
-//                        for (String string : stringList) {
-//                            dos.writeUTF(string);
-//                        }
+                        ListSection listSection = (ListSection) writer0.getValue();
+                        writeWithException(dos, listSection.getStrings(), writer -> dos.writeUTF(String.valueOf(writer)));
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
-                        OrganizationSection os = (OrganizationSection) entry.getValue();
-                        List<Organization> organizationList = os.getOrganizations();
-                        dos.writeInt(organizationList.size());
-                        writeWithException(organizationList, dos, o -> {
-                            for (Organization organization : organizationList) {
-                                dos.writeUTF(organization.getTitle());
-                                if (organization.getWebsite() == null) {
+                        OrganizationSection organizationSection = (OrganizationSection) writer0.getValue();
+                        writeWithException(dos, organizationSection.getOrganizations(), writer -> {
+                            dos.writeUTF(writer.getTitle());
+                            if (writer.getWebsite() == null) {
+                                dos.writeBoolean(false);
+                            } else {
+                                dos.writeBoolean(true);
+                                dos.writeUTF(writer.getWebsite());
+                            }
+                            writeWithException(dos, writer.getPeriods(), writerPeriod -> {
+                                dos.writeUTF(writerPeriod.getTitle());
+                                dos.writeUTF(String.valueOf(writerPeriod.getStart()));
+                                dos.writeUTF(String.valueOf(writerPeriod.getEnd()));
+                                if (writerPeriod.getDescription() == null) {
                                     dos.writeBoolean(false);
                                 } else {
                                     dos.writeBoolean(true);
-                                    dos.writeUTF(organization.getWebsite());
+                                    dos.writeUTF(writerPeriod.getDescription());
                                 }
-                                List<Period> periodList = organization.getPeriods();
-                                dos.writeInt(periodList.size());
-                                for (Period period : periodList) {
-                                    dos.writeUTF(period.getTitle());
-                                    dos.writeUTF(String.valueOf(period.getStart()));
-                                    dos.writeUTF(String.valueOf(period.getEnd()));
-                                    if (period.getDescription() == null) {
-                                        dos.writeBoolean(false);
-                                    } else {
-                                        dos.writeBoolean(true);
-                                        dos.writeUTF(period.getDescription());
-                                    }
-                                }
-                            }
+                            });
                         });
-
-//                        for (Organization organization : organizationList) {
-//                            dos.writeUTF(organization.getTitle());
-//                            dos.writeUTF(organization.getWebsite());
-//                            List<Period> periodList = organization.getPeriods();
-//                            dos.writeInt(periodList.size());
-//                            for (Period period : periodList) {
-//                                dos.writeUTF(period.getTitle());
-//                                dos.writeUTF(String.valueOf(period.getStart()));
-//                                dos.writeUTF(String.valueOf(period.getEnd()));
-//                                dos.writeUTF(period.getDescription());
-//                            }
-//                        }
                         break;
                 }
-            }
+            });
         }
     }
 
-    private void writeWithException(Collection collection, DataOutputStream dos, Writer<Collection> writer) throws IOException {
-        writer.writeCollection(collection);
+    private <T> void writeWithException(DataOutputStream dos, Collection<T> collection, WriteCollection<T> writer) throws IOException {
+        dos.writeInt(collection.size());
+        for (T t : collection) {
+            writer.write(t);
+        }
+    }
+
+    private void readWithException(DataInputStream dis, ReadCollection reader) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            reader.read();
+        }
+    }
+
+//    private <T> List<T> readReturnsList(DataInputStream dis, List<T> list, ReadCollection<T> reader) throws IOException {
+//        int size = dis.readInt();
+//        for (int i = 0; i < size; i++) {
+//            reader.read();
+//        }
+//        return list;
+//    }
+
+    @FunctionalInterface
+    interface WriteCollection<T> {
+        void write(T t) throws IOException;
     }
 
     @FunctionalInterface
-    interface Writer<Collection> {
-        void writeCollection(Collection collection) throws IOException;
+    interface ReadCollection {
+        void read() throws IOException;
     }
 }

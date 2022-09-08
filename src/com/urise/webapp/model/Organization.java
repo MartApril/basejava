@@ -97,9 +97,9 @@ public class Organization extends OrganizationSection implements Serializable{
         }
 
         public Period(String title, LocalDate start, LocalDate end, String description) {
+            Objects.requireNonNull(title, "title must not be null");
             Objects.requireNonNull(start, "start must not be null");
             Objects.requireNonNull(end, "end must not be null");
-            Objects.requireNonNull(title, "title must not be null");
             this.title = title;
             this.start = start;
             this.end = end;

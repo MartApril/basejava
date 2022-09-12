@@ -49,32 +49,19 @@ public class DataStreamSerializer implements StreamSerializer {
                             if (!isWebsiteNull) {
                                 organization.setWebsite(dis.readUTF());
                             }
-                            System.out.println("work readorg1");
-                            List<Period> periodList = new ArrayList<>();
-
-//                            organization.setPeriods(readReturnsList(dis, periodList, () -> {
-//                                Period period = new Period();
-//                                period.setTitle(dis.readUTF());
-//                                period.setStart(LocalDate.parse(dis.readUTF()));
-//                                period.setEnd(LocalDate.parse(dis.readUTF()));
-//                                boolean isDescriptionNull = dis.readBoolean();
-//                                if (!isDescriptionNull) {
-//                                    period.setDescription(dis.readUTF());
-//                                }
-//                                periodList.add(period);
-//                            }));
-                                readWithException(dis, () -> {
-                                    Period period = new Period();
-                                    period.setTitle(dis.readUTF());
-                                    period.setStart(LocalDate.parse(dis.readUTF()));
-                                    period.setEnd(LocalDate.parse(dis.readUTF()));
-                                    boolean isDescriptionNull = dis.readBoolean();
-                                    if (!isDescriptionNull) {
-                                        period.setDescription(dis.readUTF());
+                            System.out.println("work readOrg1");
+                            organization.setPeriods(readListWithException(dis, () -> {
+                                        Period period = new Period();
+                                        period.setTitle(dis.readUTF());
+                                        period.setStart(LocalDate.parse(dis.readUTF()));
+                                        period.setEnd(LocalDate.parse(dis.readUTF()));
+                                        boolean isDescriptionNull = dis.readBoolean();
+                                        if (!isDescriptionNull) {
+                                            period.setDescription(dis.readUTF());
+                                        }
+                                        return period;
                                     }
-                                    periodList.add(period);
-                                });
-                            organization.setPeriods(periodList);
+                            ));
                             organizationList.add(organization);
                             System.out.println("work readOrg");
                         });
@@ -97,38 +84,39 @@ public class DataStreamSerializer implements StreamSerializer {
                 dos.writeUTF(writer.getValue());
             });
             //write sections
-            writeWithException(dos, resume.getSections().entrySet(), writer0 -> {
-                dos.writeUTF(writer0.getKey().name());
-                switch (writer0.getKey()) {
+            writeWithException(dos, resume.getSections().entrySet(), writer -> {
+                SectionType type = writer.getKey();
+                AbstractSection section = writer.getValue();
+                dos.writeUTF(type.name());
+                switch (type) {
                     case OBJECTIVE:
                     case PERSONAL:
-                        dos.writeUTF(String.valueOf(writer0.getValue()));
+                        dos.writeUTF(((TextSection) section).getContent());
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        ListSection listSection = (ListSection) writer0.getValue();
-                        writeWithException(dos, listSection.getStrings(), writer -> dos.writeUTF(String.valueOf(writer)));
+                        writeWithException(dos, ((ListSection) section).getStrings(), dos::writeUTF);
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
-                        OrganizationSection organizationSection = (OrganizationSection) writer0.getValue();
-                        writeWithException(dos, organizationSection.getOrganizations(), writer -> {
-                            dos.writeUTF(writer.getTitle());
-                            if (writer.getWebsite() == null) {
+                        OrganizationSection organizationSection = (OrganizationSection) section;
+                        writeWithException(dos, organizationSection.getOrganizations(), organization -> {
+                            dos.writeUTF(organization.getTitle());
+                            if (organization.getWebsite() == null) {
                                 dos.writeBoolean(false);
                             } else {
                                 dos.writeBoolean(true);
-                                dos.writeUTF(writer.getWebsite());
+                                dos.writeUTF(organization.getWebsite());
                             }
-                            writeWithException(dos, writer.getPeriods(), writerPeriod -> {
-                                dos.writeUTF(writerPeriod.getTitle());
-                                dos.writeUTF(String.valueOf(writerPeriod.getStart()));
-                                dos.writeUTF(String.valueOf(writerPeriod.getEnd()));
-                                if (writerPeriod.getDescription() == null) {
+                            writeWithException(dos, organization.getPeriods(), period -> {
+                                dos.writeUTF(period.getTitle());
+                                dos.writeUTF(String.valueOf(period.getStart()));
+                                dos.writeUTF(String.valueOf(period.getEnd()));
+                                if (period.getDescription() == null) {
                                     dos.writeBoolean(false);
                                 } else {
                                     dos.writeBoolean(true);
-                                    dos.writeUTF(writerPeriod.getDescription());
+                                    dos.writeUTF(period.getDescription());
                                 }
                             });
                         });
@@ -152,13 +140,14 @@ public class DataStreamSerializer implements StreamSerializer {
         }
     }
 
-//    private <T> List<T> readReturnsList(DataInputStream dis, List<T> list, ReadCollection<T> reader) throws IOException {
-//        int size = dis.readInt();
-//        for (int i = 0; i < size; i++) {
-//            reader.read();
-//        }
-//        return list;
-//    }
+    private <T> List<T> readListWithException(DataInputStream dis, ListReader<T> list) throws IOException {
+        List<T> readerList = new ArrayList<>();
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            readerList.add(list.readList());
+        }
+        return readerList;
+    }
 
     @FunctionalInterface
     interface WriteCollection<T> {

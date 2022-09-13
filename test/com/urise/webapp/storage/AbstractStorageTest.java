@@ -7,13 +7,20 @@ import com.urise.webapp.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
-    protected static final File STORAGE_DIR= new File("C:/Users/Anna/IdeaProjects/basejava/storage");
+//    private static final String PROJECT_PATH= System.getProperty("user.dir");
+//    private static final String NAME_SEPARATOR = FileSystems.getDefault().getSeparator();
+//    private static final String FILE_STORAGE = "storage";
+//    protected static final File STORAGE_DIR= new File(PROJECT_PATH+NAME_SEPARATOR+FILE_STORAGE);
+
+
+
+
+//    protected static final File STORAGE_DIR= new File("C:/Users/Anna/IdeaProjects/basejava/storage");
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";

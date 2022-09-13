@@ -103,9 +103,9 @@ public class DataStreamSerializer implements StreamSerializer {
                         writeWithException(dos, organizationSection.getOrganizations(), organization -> {
                             dos.writeUTF(organization.getTitle());
                             if (organization.getWebsite() == null) {
-                                dos.writeBoolean(false);
-                            } else {
                                 dos.writeBoolean(true);
+                            } else {
+                                dos.writeBoolean(false);
                                 dos.writeUTF(organization.getWebsite());
                             }
                             writeWithException(dos, organization.getPeriods(), period -> {
@@ -113,9 +113,9 @@ public class DataStreamSerializer implements StreamSerializer {
                                 dos.writeUTF(String.valueOf(period.getStart()));
                                 dos.writeUTF(String.valueOf(period.getEnd()));
                                 if (period.getDescription() == null) {
-                                    dos.writeBoolean(false);
-                                } else {
                                     dos.writeBoolean(true);
+                                } else {
+                                    dos.writeBoolean(false);
                                     dos.writeUTF(period.getDescription());
                                 }
                             });

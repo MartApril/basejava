@@ -145,6 +145,29 @@ public class Organization extends OrganizationSection implements Serializable{
             this.description = description;
         }
 
+//        @Override
+//        public boolean equals(Object o) {
+//            if (this == o) return true;
+//            if (o == null || getClass() != o.getClass()) return false;
+//
+//            Period period = (Period) o;
+//
+//            if (!title.equals(period.title)) return false;
+//            if (!start.equals(period.start)) return false;
+//            if (!end.equals(period.end)) return false;
+//            return description.equals(period.description);
+//        }
+//
+//        @Override
+//        public int hashCode() {
+//            int result = title.hashCode();
+//            result = 31 * result + start.hashCode();
+//            result = 31 * result + end.hashCode();
+//            result = 31 * result + description.hashCode();
+//            return result;
+//        }
+
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -152,18 +175,18 @@ public class Organization extends OrganizationSection implements Serializable{
 
             Period period = (Period) o;
 
-            if (!title.equals(period.title)) return false;
-            if (!start.equals(period.start)) return false;
-            if (!end.equals(period.end)) return false;
-            return description.equals(period.description);
+            if (title != null ? !title.equals(period.title) : period.title != null) return false;
+            if (start != null ? !start.equals(period.start) : period.start != null) return false;
+            if (end != null ? !end.equals(period.end) : period.end != null) return false;
+            return description != null ? description.equals(period.description) : period.description == null;
         }
 
         @Override
         public int hashCode() {
-            int result = title.hashCode();
-            result = 31 * result + start.hashCode();
-            result = 31 * result + end.hashCode();
-            result = 31 * result + description.hashCode();
+            int result = title != null ? title.hashCode() : 0;
+            result = 31 * result + (start != null ? start.hashCode() : 0);
+            result = 31 * result + (end != null ? end.hashCode() : 0);
+            result = 31 * result + (description != null ? description.hashCode() : 0);
             return result;
         }
 

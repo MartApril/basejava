@@ -19,7 +19,6 @@ public class DataStreamSerializer implements StreamSerializer {
             Resume resume = new Resume(uuid, fullName);
             readWithException(dis, () -> {
                 resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-                System.out.println("work read");
             });
             //read sections
             readWithException(dis, () -> {
@@ -35,7 +34,6 @@ public class DataStreamSerializer implements StreamSerializer {
                         List<String> stringList = new ArrayList<>();
                         readWithException(dis, () -> {
                             stringList.add(dis.readUTF());
-                            System.out.println("work readList");
                         });
                         abstractSection = new ListSection(stringList);
                         break;
@@ -49,7 +47,6 @@ public class DataStreamSerializer implements StreamSerializer {
                             if (!isWebsiteNull) {
                                 organization.setWebsite(dis.readUTF());
                             }
-                            System.out.println("work readOrg1");
                             organization.setPeriods(readListWithException(dis, () -> {
                                         Period period = new Period();
                                         period.setTitle(dis.readUTF());
@@ -63,7 +60,6 @@ public class DataStreamSerializer implements StreamSerializer {
                                     }
                             ));
                             organizationList.add(organization);
-                            System.out.println("work readOrg");
                         });
                         abstractSection = new OrganizationSection(organizationList);
                         break;

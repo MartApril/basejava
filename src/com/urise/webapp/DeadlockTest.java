@@ -1,45 +1,31 @@
 package com.urise.webapp;
 
 public class DeadlockTest {
-    public static final Object MONEY = new Object();
-    public static final Object ICE_CREAM = new Object();
+    private static final String MONEY = "money";
+    private static final String ICE_CREAM = "ice cream";
 
     public static void main(String[] args) {
-        Thread thread0 = new Thread(() -> {
+        Thread buyingIceCream = new Thread(() -> {
             Person person1 = new Person("Buyer");
             synchronized (MONEY) {
-                System.out.println(person1.getName() + " is keeping his money");
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(person1.getName() + " is waiting for ice cream");
-
+                person1.printWaiting(person1.getName(), MONEY, ICE_CREAM);
                 synchronized (ICE_CREAM) {
-                    System.out.println(person1.getName() + " got ice cream");
+                    person1.printGetting(person1.getName(), ICE_CREAM);
                 }
             }
         });
-        thread0.start();
+        buyingIceCream.start();
 
-        Thread thread1 = new Thread(() -> {
+        Thread sellingIceCream = new Thread(() -> {
             Person person2 = new Person("IceMan");
             synchronized (ICE_CREAM) {
-                System.out.println(person2.getName() + " is keeping ice cream");
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(person2.getName() + " is waiting for money");
-
+                person2.printWaiting(person2.getName(), ICE_CREAM, MONEY);
                 synchronized (MONEY) {
-                    System.out.println(person2.getName() + " got money");
+                    person2.printGetting(person2.getName(), MONEY);
                 }
             }
         });
-        thread1.start();
+        sellingIceCream.start();
     }
 }
 
@@ -52,5 +38,19 @@ class Person {
 
     public String getName() {
         return name;
+    }
+
+    void printWaiting(String name, String keepingThing, String waitingThing) {
+        System.out.println(name + " is keeping " + keepingThing);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(name + " is waiting for " + waitingThing);
+    }
+
+    void printGetting(String name, String gettingThing) {
+        System.out.println(name + " got " + gettingThing);
     }
 }

@@ -6,11 +6,11 @@ import java.util.stream.Collectors;
 
 public class MainStream {
     static final int[] VALUES = {3, 2, 5, 5, 8};
-    static final List<Integer> integers = Arrays.asList(1, 3, 14, 5, 12, 1);
+    static final List<Integer> INTEGERS = Arrays.asList(1, 3, 14, 5, 12, 1);
 
     public static void main(String[] args) {
         System.out.println(minValue(VALUES));
-        oddOrEven(integers).forEach(System.out::println);
+        oddOrEven(INTEGERS).forEach(System.out::println);
     }
 
     private static int minValue(int[] values) {

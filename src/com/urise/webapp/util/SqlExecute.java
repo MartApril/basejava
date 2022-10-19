@@ -3,6 +3,6 @@ package com.urise.webapp.util;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public interface ABlockOfCode <T>{
+public interface SqlExecute<T>{
     T execute(PreparedStatement ps) throws SQLException;
 }

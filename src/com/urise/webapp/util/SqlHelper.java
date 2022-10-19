@@ -16,17 +16,16 @@ public class SqlHelper {
         connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
     }
 
-    public <T> T execute(ABlockOfCode<T> aBlockOfCode, String string) {
+    public <T> T execute(String sqlQuery, SqlExecute<T> sqlExecute) {
         try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(string)) {
+             PreparedStatement ps = conn.prepareStatement(sqlQuery)) {
 
-            T returnValue = aBlockOfCode.execute(ps);
+            T returnValue = sqlExecute.execute(ps);
 
             return returnValue;
         } catch (SQLException e) {
             throw new StorageException(e);
         }
     }
-
 }
 

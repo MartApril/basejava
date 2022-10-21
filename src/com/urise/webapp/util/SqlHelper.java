@@ -1,5 +1,6 @@
 package com.urise.webapp.util;
 
+import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.sql.ConnectionFactory;
 
@@ -19,11 +20,11 @@ public class SqlHelper {
     public <T> T execute(String sqlQuery, SqlExecute<T> sqlExecute) {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sqlQuery)) {
-
-            T returnValue = sqlExecute.execute(ps);
-
-            return returnValue;
+            return sqlExecute.execute(ps);
         } catch (SQLException e) {
+            if (e.getSQLState().equals("42710")) {
+                throw new ExistStorageException("This resume already exist.");
+            }
             throw new StorageException(e);
         }
     }

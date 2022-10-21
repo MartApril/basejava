@@ -1,11 +1,11 @@
 package com.urise.webapp.storage;
 
 import com.urise.webapp.Config;
-import com.urise.webapp.util.SqlHelper;
 
 public class SqlStorageTest extends AbstractStorageTest {
+
     public SqlStorageTest() {
-        super(new SqlStorage(new SqlHelper(Config.get().getDbUrl(), Config.get().getDbUser(), Config.get().getDbPassword())));
+        super(Config.get().getStorage());
     }
 
     @Override

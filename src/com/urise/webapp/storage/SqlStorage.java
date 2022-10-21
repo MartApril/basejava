@@ -1,6 +1,5 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.util.SqlHelper;
@@ -32,8 +31,8 @@ public class SqlStorage implements Storage {
             ps.setString(1, resume.getUuid());
             ps.setString(2, resume.getFullName());
             ps.setString(3, resume.getUuid());
-            ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
+            int count = ps.executeUpdate();
+            if (count==0) {
                 throw new NotExistStorageException(resume.getUuid());
             }
             return null;
@@ -46,10 +45,7 @@ public class SqlStorage implements Storage {
         sqlHelper.execute(sqlQuery, ps -> {
             ps.setString(1, resume.getUuid());
             ps.setString(2, resume.getFullName());
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                throw new ExistStorageException(resume.getUuid());
-            }
+            ps.execute();
             return null;
         });
     }
@@ -72,8 +68,8 @@ public class SqlStorage implements Storage {
         String sqlQuery = "DELETE FROM resume WHERE uuid = ?";
         sqlHelper.execute(sqlQuery, ps -> {
             ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
+            int count = ps.executeUpdate();
+            if (count==0) {
                 throw new NotExistStorageException(uuid);
             }
             return null;

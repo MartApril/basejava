@@ -11,9 +11,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class Config {
-    private static final Config INSTANCE = new Config();
     protected static final File PROPS = new File("./config/resume.properties");
-    private final Properties props = new Properties();
+    private static final Config INSTANCE = new Config();
     private final File storageDir;
     private final Storage storage;
 
@@ -21,11 +20,12 @@ public class Config {
         return INSTANCE;
     }
 
-    public Config() {
+    private Config() {
         try (InputStream is = new FileInputStream(PROPS)) {
+            Properties props = new Properties();
             props.load(is);
             storageDir = new File(props.getProperty("storage.dir"));
-            storage = new SqlStorage(new SqlHelper(props.getProperty("jdbc:postgresql://localhost:5432/resumes)"), props.getProperty("postgres"), props.getProperty("postgres")));
+            storage = new SqlStorage(new SqlHelper(props.getProperty("db.url"), props.getProperty("db.user"), props.getProperty("db.password")));
         } catch (IOException e) {
             throw new IllegalStateException("Invalid config file " + PROPS.getAbsolutePath());
         }

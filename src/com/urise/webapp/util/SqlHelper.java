@@ -22,7 +22,7 @@ public class SqlHelper {
              PreparedStatement ps = conn.prepareStatement(sqlQuery)) {
             return sqlExecute.execute(ps);
         } catch (SQLException e) {
-            if (e.getSQLState().equals("42710")) {
+            if (e.getSQLState().equals("23505")) {
                 throw new ExistStorageException("This resume already exist.");
             }
             throw new StorageException(e);

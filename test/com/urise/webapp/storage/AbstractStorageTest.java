@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -21,10 +22,10 @@ public abstract class AbstractStorageTest {
 
 
 //    protected static final File STORAGE_DIR= new File("C:/Users/Anna/IdeaProjects/basejava/storage");
-    private static final String UUID_1 = "uuid1";
-    private static final String UUID_2 = "uuid2";
-    private static final String UUID_3 = "uuid3";
-    private static final String UUID_4 = "uuid4";
+    private static final String UUID_1 = UUID.randomUUID().toString();
+    private static final String UUID_2 = UUID.randomUUID().toString();
+    private static final String UUID_3 = UUID.randomUUID().toString();
+    private static final String UUID_4 = UUID.randomUUID().toString();
     private static final String FULL_NAME_1 = "fullName_1";
     private static final String FULL_NAME_2 = "fullName_2";
     private static final String FULL_NAME_3 = "fullName_3";

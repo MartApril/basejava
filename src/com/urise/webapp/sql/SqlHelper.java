@@ -1,8 +1,7 @@
-package com.urise.webapp.util;
+package com.urise.webapp.sql;
 
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.StorageException;
-import com.urise.webapp.sql.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,6 +24,25 @@ public class SqlHelper {
             if (e.getSQLState().equals("23505")) {
                 throw new ExistStorageException("This resume already exist.");
             }
+            throw new StorageException(e);
+        }
+    }
+
+    public <T> T transactionalExecute(SqlTransaction<T> executor) {
+        try (Connection conn = connectionFactory.getConnection()) {
+            try {
+                conn.setAutoCommit(false);
+                T res = executor.execute(conn);
+                conn.commit();
+                return res;
+            } catch (SQLException e) {
+                conn.rollback();
+                if (e.getSQLState().equals("23505")) {
+                    throw new ExistStorageException(null);
+                }
+                throw new StorageException(e);
+            }
+        } catch (SQLException e) {
             throw new StorageException(e);
         }
     }

@@ -1,12 +1,16 @@
 package com.urise.webapp;
 
+import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 public class ResumeTestData {
     public static Resume createNewResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 //        Map<SectionType, AbstractSection> mapSections = new EnumMap<SectionType, AbstractSection>(SectionType.class);
-//        Map<ContactType, String> mapContacts = new EnumMap<ContactType, String>(ContactType.class);
+        Map<ContactType, String> mapContacts = new EnumMap<ContactType, String>(ContactType.class);
 //
 //        List<String> achievements = new ArrayList<>();
 //        List<String> qualifications = new ArrayList<>();
@@ -44,13 +48,13 @@ public class ResumeTestData {
 //        periodsOfEducation.add(new Organization.Period("Закончил с отличием",1984, Month.of(9), 1987, Month.of(6), ""));
 //        organizationsOfEducation.add(new Organization("Заочная физико-техническая школа при МФТИ", "school.mipt.ru", periodsOfEducation));
 //        //fill map of contacts
-//        mapContacts.put(ContactType.PHONE, "+7(921) 855-0482");
-//        mapContacts.put(ContactType.SKYPE, "grigory.kislin");
-//        mapContacts.put(ContactType.MAIL, "gkislin@yandex.ru");
-//        mapContacts.put(ContactType.LINKEDIN, "gkislin");
-//        mapContacts.put(ContactType.GITHUB, "gkislin");
-//        mapContacts.put(ContactType.STACKOVERFLOW, "grigory-kislin");
-//        mapContacts.put(ContactType.HOME, "gkislin.ru");
+        mapContacts.put(ContactType.PHONE, "+7(921) 855-0482");
+        mapContacts.put(ContactType.SKYPE, "grigory.kislin");
+        mapContacts.put(ContactType.MAIL, "gkislin@yandex.ru");
+        mapContacts.put(ContactType.LINKEDIN, "gkislin");
+        mapContacts.put(ContactType.GITHUB, "gkislin");
+        mapContacts.put(ContactType.STACKOVERFLOW, "grigory-kislin");
+        mapContacts.put(ContactType.HOME, "gkislin.ru");
 //        //fill map of sections
 //        mapSections.put(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
 //        mapSections.put(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
@@ -59,7 +63,7 @@ public class ResumeTestData {
 //        mapSections.put(SectionType.EXPERIENCE, new OrganizationSection(organizations));
 //        mapSections.put(SectionType.EDUCATION, new OrganizationSection(organizationsOfEducation));
 
-//        resume.setContacts(mapContacts);
+        resume.setContacts(mapContacts);
 //        resume.setSections(mapSections);
         // Print
         System.out.println(resume);

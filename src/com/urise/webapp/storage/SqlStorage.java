@@ -32,28 +32,10 @@ public class SqlStorage implements Storage {
                         ps.setString(1, resume.getUuid());
                         ps.setString(2, resume.getFullName());
                         ps.setString(3, resume.getUuid());
-                        if (ps.executeUpdate() == 0) {
-                            throw new NotExistStorageException(resume.getUuid());
-                        }
-                    }
-                    try (PreparedStatement ps = conn.prepareStatement("UPDATE contact SET resume_uuid =?, type =?, value =? WHERE resume_uuid=?")) {
-                        for (Map.Entry<ContactType, String> e : resume.getContacts().entrySet()) {
-                            ps.setString(1, resume.getUuid());
-                            ps.setString(2, e.getKey().name());
-                            ps.setString(3, e.getValue());
-                            ps.setString(4, resume.getUuid());
-                            if (ps.executeUpdate() == 0) {
-                                throw new NotExistStorageException(resume.getUuid());
-                            }
-                        }
                     }
                     try (PreparedStatement ps = conn.prepareStatement("DELETE FROM contact WHERE resume_uuid=?")) {
-                        for (Map.Entry<ContactType, String> e : resume.getContacts().entrySet()) {
-                            ps.setString(1, resume.getUuid());
-                            if (ps.executeUpdate() == 0) {
-                                throw new NotExistStorageException(resume.getUuid());
-                            }
-                        }
+                        ps.setString(1, resume.getUuid());
+                        ps.execute();
                     }
                     try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (resume_uuid, type, value) VALUES (?,?,?)")) {
                         addContacts(resume, ps);
@@ -61,26 +43,6 @@ public class SqlStorage implements Storage {
                     return null;
                 }
         );
-
-//        sqlHelper.execute("UPDATE resume SET uuid =?, full_name=? WHERE uuid=?", ps -> {
-//            ps.setString(1, resume.getUuid());
-//            ps.setString(2, resume.getFullName());
-//            ps.setString(3, resume.getUuid());
-//            if (ps.executeUpdate() == 0) {
-//                throw new NotExistStorageException(resume.getUuid());
-//            }
-//            return null;
-//        });
-//
-//        for (Map.Entry<ContactType, String> e : resume.getContacts().entrySet()) {
-//            sqlHelper.<Void>execute("UPDATE contact SET resume_uuid =?, type=?, value =? WHERE resume_uuid=?", ps -> {
-//                ps.setString(1, resume.getUuid());
-//                ps.setString(2, e.getKey().name());
-//                ps.setString(3, e.getValue());
-//                ps.setString(4, resume.getUuid());
-//                return null;
-//            });
-//        }
     }
 
     @Override
@@ -154,13 +116,7 @@ public class SqlStorage implements Storage {
                 while (rs.next()) {
                     Resume resume = new Resume(rs.getString("uuid"), rs.getString("full_name"));
                     resumes.add(resume);
-                    String value = rs.getString("value");
-                    if (value == null) {
-                        System.out.println("Resume doesn't have any contacts");
-                    } else {
-                        ContactType type = ContactType.valueOf((rs.getString("type")));
-                        resume.addContact(type, value);
-                    }
+                    getContacts(rs, resume);
                 }
                 return resumes;
             }
@@ -205,5 +161,15 @@ public class SqlStorage implements Storage {
             ps.addBatch();
         }
         ps.executeBatch();
+    }
+
+    private void getContacts(ResultSet rs, Resume resume) throws SQLException {
+        String value = rs.getString("value");
+        if (value != null) {
+            ContactType type = ContactType.valueOf((rs.getString("type")));
+            resume.addContact(type, value);
+        } else {
+            System.out.println("Resume " + resume.getFullName() + " doesn't have any contacts");
+        }
     }
 }

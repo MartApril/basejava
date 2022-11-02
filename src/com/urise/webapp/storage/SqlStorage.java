@@ -32,6 +32,9 @@ public class SqlStorage implements Storage {
                         ps.setString(1, resume.getUuid());
                         ps.setString(2, resume.getFullName());
                         ps.setString(3, resume.getUuid());
+                        if (ps.executeUpdate() == 0) {
+                            throw new NotExistStorageException(resume.getUuid());
+                        }
                     }
                     try (PreparedStatement ps = conn.prepareStatement("DELETE FROM contact WHERE resume_uuid=?")) {
                         ps.setString(1, resume.getUuid());
@@ -76,13 +79,7 @@ public class SqlStorage implements Storage {
                     }
                     Resume resume = new Resume(uuid, rs.getString("full_name"));
                     do {
-                        String value = rs.getString("value");
-                        if (value != null) {
-                            ContactType type = ContactType.valueOf((rs.getString("type")));
-                            resume.addContact(type, value);
-                        } else {
-                            System.out.println("Resume " + resume.getFullName() + " doesn't have any contacts");
-                        }
+                        getContacts(rs, resume);
                     } while (rs.next());
                     return resume;
                 });

@@ -1,7 +1,6 @@
 package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.NotExistStorageException;
-import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.sql.SqlHelper;
@@ -9,9 +8,7 @@ import com.urise.webapp.sql.SqlHelper;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SqlStorage implements Storage {
     private final SqlHelper sqlHelper;
@@ -100,24 +97,22 @@ public class SqlStorage implements Storage {
     @Override
     public List<Resume> getAllSorted() {
         return sqlHelper.transactionalExecute(conn -> {
-            List<Resume> resumes = new ArrayList<>();
             try (PreparedStatement ps = conn.prepareStatement("" +
                     "    SELECT * FROM resume r " +
                     " LEFT JOIN contact c " +
                     "        ON r.uuid = c.resume_uuid " +
                     "     ORDER BY full_name, uuid")) {
                 ResultSet rs = ps.executeQuery();
-                if (!rs.next()) {
-                    throw new StorageException("Resume is empty");
-                }
+                Map<String, Resume> mapOfResumes = new HashMap<>();
                 while (rs.next()) {
                     Resume resume = new Resume(rs.getString("uuid"), rs.getString("full_name"));
-                    resumes.add(resume);
                     getContacts(rs, resume);
+                    mapOfResumes.put(resume.getUuid(), resume);
                 }
-                return resumes;
+               return new ArrayList<>(mapOfResumes.values());
             }
         });
+
 //        return sqlHelper.transactionalExecute(conn -> {
 //                    List<Resume> resumes = new ArrayList<>();
 //                    try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume ORDER BY full_name, uuid")) {

@@ -7,8 +7,7 @@ import com.urise.webapp.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -72,11 +71,9 @@ public abstract class AbstractStorageTest {
     public void update() {
         Resume resume1= storage.get(UUID_1);
         Resume resume = new Resume(UUID_1, resume1.getFullName());
-//        resume.setContacts(resume1.getContacts());
         storage.update(resume);
         assertGet(resume);
         assertTrue(resume.equals(storage.get(UUID_1)));
-//        assertSame(resume, storage.get(UUID_1));
     }
 
     @Test
@@ -108,7 +105,8 @@ public abstract class AbstractStorageTest {
     public void getAllStorage() {
         List<Resume> list = storage.getAllSorted();
         assertEquals(3, list.size());
-//        assertEquals(list, Arrays.asList(RESUME_1, RESUME_2, RESUME_3));
+        List<Resume> sortedResumes = Arrays.asList(RESUME_1, RESUME_2, RESUME_3);
+        assertEquals(sortedResumes, list);
     }
 
     @Test

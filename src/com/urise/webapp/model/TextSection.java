@@ -37,4 +37,9 @@ public class TextSection extends AbstractSection{
     public String getContent() {
         return content;
     }
+
+    @Override
+    public String getContentAsString() {
+        return content;
+    }
 }

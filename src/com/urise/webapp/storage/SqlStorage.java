@@ -1,21 +1,28 @@
 package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.NotExistStorageException;
-import com.urise.webapp.model.*;
+import com.urise.webapp.model.AbstractSection;
+import com.urise.webapp.model.ContactType;
+import com.urise.webapp.model.Resume;
+import com.urise.webapp.model.SectionType;
 import com.urise.webapp.sql.SqlHelper;
+import com.urise.webapp.util.JsonParser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class SqlStorage implements Storage {
     private final SqlHelper sqlHelper;
 
     public SqlStorage(SqlHelper sqlHelper) {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException(e);
+        }
         this.sqlHelper = sqlHelper;
     }
 
@@ -143,7 +150,7 @@ public class SqlStorage implements Storage {
                 ps.setString(1, resume.getUuid());
                 ps.setString(2, mapEntry.getKey().name());
                 AbstractSection abstractSection = mapEntry.getValue();
-                ps.setString(3, abstractSection.getContentAsString());
+                ps.setString(3, JsonParser.write(abstractSection, AbstractSection.class));
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -181,12 +188,7 @@ public class SqlStorage implements Storage {
         String value = rs.getString("section_value");
         if (value != null) {
             SectionType type = SectionType.valueOf(rs.getString("section_type"));
-            if (type == SectionType.OBJECTIVE || type == SectionType.PERSONAL) {
-                resume.addSection(type, new TextSection(value));
-            } else if (type == SectionType.ACHIEVEMENT || type == SectionType.QUALIFICATIONS) {
-                List<String> list = Stream.of(value.split("\n")).collect(Collectors.toList());
-                resume.addSection(type, new ListSection(list));
-            }
+            resume.addSection(type, JsonParser.read(value, AbstractSection.class));
         }
     }
 }

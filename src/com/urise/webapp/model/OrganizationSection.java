@@ -3,8 +3,9 @@ package com.urise.webapp.model;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
-public class OrganizationSection extends AbstractSection{
+public class OrganizationSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
     List<Organization> organizations;
 
@@ -41,11 +42,16 @@ public class OrganizationSection extends AbstractSection{
 
     @Override
     public String toString() {
-        return organizations.toString();
+        return organizations.stream().map(Object::toString)
+                .collect(Collectors.joining("\n "));
     }
 
     @Override
     public String getContentAsString() {
-        return "null";
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Organization string : organizations) {
+            stringBuilder.append(string).append("\n");
+        }
+        return stringBuilder.toString();
     }
 }

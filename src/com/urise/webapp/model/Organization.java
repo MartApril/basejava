@@ -80,9 +80,15 @@ public class Organization extends OrganizationSection implements Serializable{
 
     @Override
     public String toString() {
-        return '\'' + title + '\'' +
-                ", '" + website + '\'' +
-                ", " + periods;
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Period string : periods) {
+            stringBuilder.append(string).append("\n");
+        }
+        String a = stringBuilder.toString();
+        return title + ", " + website + ", " + a;
+//                ", " + periods.toString();
+
+
     }
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Period implements Serializable {
@@ -145,29 +151,6 @@ public class Organization extends OrganizationSection implements Serializable{
             this.description = description;
         }
 
-//        @Override
-//        public boolean equals(Object o) {
-//            if (this == o) return true;
-//            if (o == null || getClass() != o.getClass()) return false;
-//
-//            Period period = (Period) o;
-//
-//            if (!title.equals(period.title)) return false;
-//            if (!start.equals(period.start)) return false;
-//            if (!end.equals(period.end)) return false;
-//            return description.equals(period.description);
-//        }
-//
-//        @Override
-//        public int hashCode() {
-//            int result = title.hashCode();
-//            result = 31 * result + start.hashCode();
-//            result = 31 * result + end.hashCode();
-//            result = 31 * result + description.hashCode();
-//            return result;
-//        }
-
-
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -194,7 +177,7 @@ public class Organization extends OrganizationSection implements Serializable{
         public String toString() {
             return title +
                     " c " + start +
-                    " по " + end + " - " +
+                    " по " + end + " " +
                     description;
         }
     }

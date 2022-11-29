@@ -18,16 +18,14 @@ public abstract class AbstractStorageTest {
 //    protected static final File STORAGE_DIR= new File(PROJECT_PATH+NAME_SEPARATOR+FILE_STORAGE);
 
 
-
-
-//    protected static final File STORAGE_DIR= new File("C:/Users/Anna/IdeaProjects/basejava/storage");
+    //    protected static final File STORAGE_DIR= new File("C:/Users/Anna/IdeaProjects/basejava/storage");
     private static final String UUID_1 = UUID.randomUUID().toString();
     private static final String UUID_2 = UUID.randomUUID().toString();
     private static final String UUID_3 = UUID.randomUUID().toString();
     private static final String UUID_4 = UUID.randomUUID().toString();
-    private static final String FULL_NAME_1 = "fullName_1";
-    private static final String FULL_NAME_2 = "fullName_2";
-    private static final String FULL_NAME_3 = "fullName_3";
+    private static final String FULL_NAME_1 = "Ivanov";
+    private static final String FULL_NAME_2 = "Kislin";
+    private static final String FULL_NAME_3 = "Grigoriev";
     private static final String FULL_NAME_4 = "fullName_4";
     private static final Resume RESUME_1;
     private static final Resume RESUME_2;
@@ -69,7 +67,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume resume1= storage.get(UUID_1);
+        Resume resume1 = storage.get(UUID_1);
         Resume resume = new Resume(UUID_1, resume1.getFullName());
         storage.update(resume);
         assertGet(resume);
@@ -80,7 +78,7 @@ public abstract class AbstractStorageTest {
     public void save() {
         storage.save(RESUME_4);
         assertSize(4);
-//        assertGet(RESUME_4);
+        assertGet(RESUME_4);
 //        Resume[] expected = {RESUME_1, RESUME_2, RESUME_3, RESUME_4};
 //        assertArray(expected);
     }
@@ -105,7 +103,7 @@ public abstract class AbstractStorageTest {
     public void getAllStorage() {
         List<Resume> list = storage.getAllSorted();
         assertEquals(3, list.size());
-        List<Resume> sortedResumes = Arrays.asList(RESUME_1, RESUME_2, RESUME_3);
+        List<Resume> sortedResumes = Arrays.asList(RESUME_3, RESUME_1, RESUME_2);
         assertEquals(sortedResumes, list);
     }
 

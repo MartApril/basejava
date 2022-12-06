@@ -2,7 +2,7 @@ package com.urise.webapp;
 
 import com.urise.webapp.model.*;
 
-import java.time.Month;
+import java.time.LocalDate;
 import java.util.*;
 
 public class ResumeTestData {
@@ -41,14 +41,16 @@ public class ResumeTestData {
         qualifications.add("Инструменты: Maven + plugin development, Gradle, настройка Ngnix");
         qualifications.add("администрирование Hudson/Jenkins, Ant + custom task, SoapUI, JPublisher, Flyway, Nagios, iReport, OpenCmis, Bonita, pgBouncer");
 //        //list of organizations
-        periods.add(new Organization.Period("Автор проекта", 2013, Month.of(10), "Создание, организация и проведение Java онлайн проектов и стажировок."));
+        periods.add(new Organization.Period("Автор проекта", LocalDate.now(), LocalDate.of(1999, 10, 10), "Создание, организация и проведение Java онлайн проектов и стажировок."));
         organizations.add(new Organization("Java Online Projects", "javaops.ru", periods));
 //        //list of organizationsOfEducation
-        periodsOfEducation.add(new Organization.Period("Закончил с отличием", 1984, Month.of(9), 1987, Month.of(6), ""));
+//        periodsOfEducation.add(new Organization.Period("Закончил с отличием", 1984, Month.of(9), 1987, Month.of(6), ""));
+        periodsOfEducation.add(new Organization.Period("Закончил с отличием", LocalDate.now(), LocalDate.of(1999, 10, 10), ""));
         organizationsOfEducation.add(new Organization("Заочная физико-техническая школа при МФТИ", "school.mipt.ru", periodsOfEducation));
         // list of education2
         organizationsOfEducation.add(new Organization("МФТИ", "school.mipt.ru",
-                new ArrayList<>(Collections.singleton(new Organization.Period("\n Закончил с отличием", 1986, Month.of(9), 1989, Month.of(12), "")))));
+                new ArrayList<>(Collections.singleton(new Organization.Period("\n Закончил с отличием", LocalDate.now(), LocalDate.of(1999, 10, 10), "")))));
+//                new ArrayList<>(Collections.singleton(new Organization.Period("\n Закончил с отличием", 1986, Month.of(9), 1989, Month.of(12), "")))));
 
 //        //fill map of contacts
         mapContacts.put(ContactType.PHONE, "+7(921) 855-0482");

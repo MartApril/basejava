@@ -1,5 +1,6 @@
 package com.urise.webapp.model;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,7 +10,9 @@ public class ListSection extends AbstractSection {
 
     public ListSection() {
     }
-
+    public ListSection(String... items) {
+        this(Arrays.asList(items));
+    }
     public ListSection(List<String> strings) {
         Objects.requireNonNull(strings, "strings must not be null");
         this.strings = strings;
@@ -36,9 +39,14 @@ public class ListSection extends AbstractSection {
 
     @Override
     public String toString() {
-        return "ListSection{" +
-                "strings=" + strings +
-                '}';
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String string : strings) {
+            stringBuilder.append(string).append("\n");
+        }
+        return stringBuilder.toString();
+//        return "ListSection{" +
+//                "strings=" + strings +
+//                '}';
     }
 
     @Override

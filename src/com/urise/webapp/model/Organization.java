@@ -8,14 +8,17 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import static com.urise.webapp.util.DateUtil.NOW;
 import static com.urise.webapp.util.DateUtil.of;
 
-public class Organization extends OrganizationSection implements Serializable{
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Organization extends OrganizationSection implements Serializable {
     private static final long serialVersionUID = 1L;
+    public static final Organization EMPTY = new Organization("", "", Period.EMPTY);
     private String title;
     private String website;
     private List<Period> periods;
@@ -49,6 +52,12 @@ public class Organization extends OrganizationSection implements Serializable{
 
     public Organization(List<Organization> organizations) {
         super(organizations);
+    }
+
+    public Organization(String website, String title, Period... periods) {
+        this.title = title;
+        this.website = website;
+        this.periods = Arrays.asList(periods);
     }
 
     public Organization(String title, String website, List<Period> periods) {
@@ -90,8 +99,10 @@ public class Organization extends OrganizationSection implements Serializable{
 
 
     }
+
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Period implements Serializable {
+        public static final Period EMPTY = new Period();
         private String title;
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate start;
@@ -109,14 +120,15 @@ public class Organization extends OrganizationSection implements Serializable{
             this.title = title;
             this.start = start;
             this.end = end;
-            this.description = description;
+            this.description = description == null ? "" : description;
         }
-        public Period(String title,int startYear, Month startMonth,  String description) {
+
+        public Period(String title, int startYear, Month startMonth, String description) {
             this(title, of(startYear, startMonth), NOW, description);
         }
 
-        public Period(String title,int startYear, Month startMonth, int endYear, Month endMonth, String description) {
-            this(title, of(startYear, startMonth),of(endYear, endMonth), description);
+        public Period(String title, int startYear, Month startMonth, int endYear, Month endMonth, String description) {
+            this(title, of(startYear, startMonth), of(endYear, endMonth), description);
         }
 
         public String getTitle() {
@@ -175,10 +187,14 @@ public class Organization extends OrganizationSection implements Serializable{
 
         @Override
         public String toString() {
-            return title +
-                    " c " + start +
-                    " по " + end + " " +
-                    description;
+            return "Position(" + start + ',' + end + ',' + title + ',' + description + ')';
         }
+//        @Override
+//        public String toString() {
+//            return title +
+//                    " c " + start +
+//                    " по " + end + " " +
+//                    description;
+//        }
     }
 }

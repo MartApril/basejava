@@ -7,13 +7,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-
-import static com.urise.webapp.util.DateUtil.NOW;
-import static com.urise.webapp.util.DateUtil.of;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Organization extends OrganizationSection implements Serializable {
@@ -93,11 +89,8 @@ public class Organization extends OrganizationSection implements Serializable {
         for (Period string : periods) {
             stringBuilder.append(string).append("\n");
         }
-        String a = stringBuilder.toString();
-        return title + ", " + website + ", " + a;
-//                ", " + periods.toString();
-
-
+        String stringOfPeriods = stringBuilder.toString();
+        return title + ", " + website + ", " + stringOfPeriods;
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
@@ -105,42 +98,34 @@ public class Organization extends OrganizationSection implements Serializable {
         public static final Period EMPTY = new Period();
         private String title;
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
-        private LocalDate start;
+        private LocalDate startDate;
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
-        private LocalDate end;
+        private LocalDate endDate;
         private String description;
 
         public Period() {
         }
 
-        public Period(String title, LocalDate start, LocalDate end, String description) {
+        public Period(LocalDate startDate, LocalDate endDate, String title, String description) {
             Objects.requireNonNull(title, "title must not be null");
-            Objects.requireNonNull(start, "start must not be null");
-            Objects.requireNonNull(end, "end must not be null");
+            Objects.requireNonNull(startDate, "start must not be null");
+            Objects.requireNonNull(endDate, "end must not be null");
+            this.startDate = startDate;
+            this.endDate = endDate;
             this.title = title;
-            this.start = start;
-            this.end = end;
             this.description = description == null ? "" : description;
-        }
-
-        public Period(String title, int startYear, Month startMonth, String description) {
-            this(title, of(startYear, startMonth), NOW, description);
-        }
-
-        public Period(String title, int startYear, Month startMonth, int endYear, Month endMonth, String description) {
-            this(title, of(startYear, startMonth), of(endYear, endMonth), description);
         }
 
         public String getTitle() {
             return title;
         }
 
-        public LocalDate getStart() {
-            return start;
+        public LocalDate getStartDate() {
+            return startDate;
         }
 
-        public LocalDate getEnd() {
-            return end;
+        public LocalDate getEndDate() {
+            return endDate;
         }
 
         public String getDescription() {
@@ -151,12 +136,12 @@ public class Organization extends OrganizationSection implements Serializable {
             this.title = title;
         }
 
-        public void setStart(LocalDate start) {
-            this.start = start;
+        public void setStartDate(LocalDate startDate) {
+            this.startDate = startDate;
         }
 
-        public void setEnd(LocalDate end) {
-            this.end = end;
+        public void setEndDate(LocalDate endDate) {
+            this.endDate = endDate;
         }
 
         public void setDescription(String description) {
@@ -171,30 +156,26 @@ public class Organization extends OrganizationSection implements Serializable {
             Period period = (Period) o;
 
             if (title != null ? !title.equals(period.title) : period.title != null) return false;
-            if (start != null ? !start.equals(period.start) : period.start != null) return false;
-            if (end != null ? !end.equals(period.end) : period.end != null) return false;
+            if (startDate != null ? !startDate.equals(period.startDate) : period.startDate != null) return false;
+            if (endDate != null ? !endDate.equals(period.endDate) : period.endDate != null) return false;
             return description != null ? description.equals(period.description) : period.description == null;
         }
 
         @Override
         public int hashCode() {
             int result = title != null ? title.hashCode() : 0;
-            result = 31 * result + (start != null ? start.hashCode() : 0);
-            result = 31 * result + (end != null ? end.hashCode() : 0);
+            result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
+            result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
             result = 31 * result + (description != null ? description.hashCode() : 0);
             return result;
         }
 
         @Override
         public String toString() {
-            return "Position(" + start + ',' + end + ',' + title + ',' + description + ')';
+            return title +
+                    " c " + startDate +
+                    " по " + endDate + " " +
+                    description;
         }
-//        @Override
-//        public String toString() {
-//            return title +
-//                    " c " + start +
-//                    " по " + end + " " +
-//                    description;
-//        }
     }
 }

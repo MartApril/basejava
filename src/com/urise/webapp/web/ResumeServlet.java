@@ -109,13 +109,13 @@ public class ResumeServlet extends HttpServlet {
                             if (!HtmlUtil.isEmpty(name)) {
                                 List<Organization.Period> periods = new ArrayList<>();
                                 String pfx = type.name() + i;
+                                String[] startDates = request.getParameterValues(pfx + "startDate");
+                                String[] endDates = request.getParameterValues(pfx + "endDate");
                                 String[] titles = request.getParameterValues(pfx + "title");
-                                String[] startDates = request.getParameterValues(pfx + "start");
-                                String[] endDates = request.getParameterValues(pfx + "end");
                                 String[] descriptions = request.getParameterValues(pfx + "description");
                                 for (int j = 0; j < titles.length; j++) {
                                     if (!HtmlUtil.isEmpty(titles[j])) {
-                                        periods.add(new Organization.Period(titles[j], DateUtil.parse(startDates[j]), DateUtil.parse(endDates[j]), descriptions[j]));
+                                        periods.add(new Organization.Period(DateUtil.parse(startDates[j]), DateUtil.parse(endDates[j]), titles[j], descriptions[j]));
                                     }
                                 }
                                 organizations.add(new Organization(name, urls[i], periods));

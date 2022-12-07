@@ -22,16 +22,6 @@
                 <%=contactEntry.getKey().toHtml(contactEntry.getValue())%><br/>
         </c:forEach>
     <p>
-        <%--    <p>--%>
-        <%--        <c:forEach var="sectionEntry" items="${resume.sections}">--%>
-        <%--            <jsp:useBean id="sectionEntry"--%>
-        <%--                         type="java.util.Map.Entry<com.urise.webapp.model.SectionType, com.urise.webapp.model.AbstractSection>"/>--%>
-        <%--                    <%=sectionEntry.getKey().getTitle()%><br/>--%>
-        <%--                <%=sectionEntry.getKey().toHtml("\n"+sectionEntry.getValue().getContentAsString())%><br/>--%>
-        <%--            <br/>--%>
-        <%--        </c:forEach>--%>
-        <%--    <p>--%>
-
     <hr>
     <table cellpadding="2">
         <c:forEach var="sectionEntry" items="${resume.sections}">

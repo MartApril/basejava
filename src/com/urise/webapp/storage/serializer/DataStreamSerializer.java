@@ -50,8 +50,8 @@ public class DataStreamSerializer implements StreamSerializer {
                             organization.setPeriods(readListWithException(dis, () -> {
                                         Period period = new Period();
                                         period.setTitle(dis.readUTF());
-                                        period.setStart(LocalDate.parse(dis.readUTF()));
-                                        period.setEnd(LocalDate.parse(dis.readUTF()));
+                                        period.setStartDate(LocalDate.parse(dis.readUTF()));
+                                        period.setEndDate(LocalDate.parse(dis.readUTF()));
                                         boolean isDescriptionNull = dis.readBoolean();
                                         if (!isDescriptionNull) {
                                             period.setDescription(dis.readUTF());
@@ -106,8 +106,8 @@ public class DataStreamSerializer implements StreamSerializer {
                             }
                             writeWithException(dos, organization.getPeriods(), period -> {
                                 dos.writeUTF(period.getTitle());
-                                dos.writeUTF(String.valueOf(period.getStart()));
-                                dos.writeUTF(String.valueOf(period.getEnd()));
+                                dos.writeUTF(String.valueOf(period.getStartDate()));
+                                dos.writeUTF(String.valueOf(period.getEndDate()));
                                 if (period.getDescription() == null) {
                                     dos.writeBoolean(true);
                                 } else {

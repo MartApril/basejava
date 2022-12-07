@@ -8,6 +8,6 @@ public class HtmlUtil {
     }
 
     public static String formatDates(Organization.Period period) {
-        return DateUtil.format(period.getStart()) + " - " + DateUtil.format(period.getEnd());
+        return DateUtil.format(period.getStartDate()) + " - " + DateUtil.format(period.getEndDate());
     }
 }

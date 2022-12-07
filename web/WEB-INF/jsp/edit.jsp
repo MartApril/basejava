@@ -54,7 +54,7 @@
                         </dl>
                         <dl>
                             <dt>Сайт учереждения:</dt>
-                            <dd><input type="text" name='${type}url' size=100 value="${organizations.website}"></dd>
+                            <dd><input type="text" name='${type}website' size=100 value="${organizations.website}"></dd>
                             </dd>
                         </dl>
                         <br>
@@ -71,14 +71,15 @@
                                     <dt>Начальная дата:</dt>
                                     <dd>
                                         <input type="text" name="${type}${counter.index}startDate" size=10
-                                               value="<%=DateUtil.format(period.getStart())%>" placeholder="MM/yyyy">
+                                               value="<%=DateUtil.format(period.getStartDate())%>"
+                                               placeholder="MM/yyyy">
                                     </dd>
                                 </dl>
                                 <dl>
                                     <dt>Конечная дата:</dt>
                                     <dd>
                                         <input type="text" name="${type}${counter.index}endDate" size=10
-                                               value="<%=DateUtil.format(period.getEnd())%>" placeholder="MM/yyyy">
+                                               value="<%=DateUtil.format(period.getEndDate())%>" placeholder="MM/yyyy">
                                 </dl>
                                 <dl>
                                     <dt>Описание:</dt>
@@ -95,19 +96,6 @@
         <button type="submit">Сохранить</button>
         <button onclick="window.history.back()">Отменить</button>
     </form>
-
-    <%--        <h3>Секции:</h3>--%>
-    <%--        <c:forEach var="type" items="<%=SectionType.values()%>">--%>
-    <%--            <dl>--%>
-    <%--                <dt>${type.title}</dt>--%>
-    <%--                <dd><input type="text" name="${type.name()}" size =50 value="${resume.getSection(type)}"></dd>--%>
-    <%--            </dl>--%>
-    <%--        </c:forEach>--%>
-
-    <%--        <hr>--%>
-    <%--        <button type="submit">Сохранить</button>--%>
-    <%--        <button onclick="window.history.back()">Отменить</button>--%>
-    <%--    </form>--%>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>

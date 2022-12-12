@@ -19,7 +19,7 @@
         <input type="hidden" name="uuid" value="${resume.uuid}">
         <dl>
             <dt>Имя:</dt>
-            <dd><input type="text" name="fullName" size=50 value="${resume.fullName}"></dd>
+            <dd><input type="text" name="fullName" size=50 value="${resume.fullName}" required></dd>
         </dl>
         <h3>Контакты:</h3>
         <c:forEach var="type" items="<%=ContactType.values()%>">
@@ -62,12 +62,6 @@
                             <c:forEach var="period" items="${organizations.periods}">
                                 <jsp:useBean id="period" type="com.urise.webapp.model.Organization.Period"/>
                                 <dl>
-                                    <dt>Должность:</dt>
-                                    <dd><input type="text" name='${type}${counter.index}title' size=75
-                                               value="${period.title}">
-                                </dl>
-
-                                <dl>
                                     <dt>Начальная дата:</dt>
                                     <dd>
                                         <input type="text" name="${type}${counter.index}startDate" size=10
@@ -80,6 +74,11 @@
                                     <dd>
                                         <input type="text" name="${type}${counter.index}endDate" size=10
                                                value="<%=DateUtil.format(period.getEndDate())%>" placeholder="MM/yyyy">
+                                </dl>
+                                <dl>
+                                    <dt>Должность:</dt>
+                                    <dd><input type="text" name='${type}${counter.index}title' size=75
+                                               value="${period.title}">
                                 </dl>
                                 <dl>
                                     <dt>Описание:</dt>

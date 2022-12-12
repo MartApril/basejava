@@ -82,8 +82,10 @@ public class Resume implements Serializable {
     }
 
     public Resume(String uuid, String fullName) {
-        this.uuid = Objects.requireNonNull(uuid, "uuid must not be null");
-        this.fullName = Objects.requireNonNull(fullName, "fullname must not be null");
+        Objects.requireNonNull(uuid, "uuid must not be null");
+        Objects.requireNonNull(fullName, "fullName must not be null");
+        this.uuid = uuid;
+        this.fullName = fullName;
     }
 
     public String getUuid() {

@@ -6,7 +6,7 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 
 public class DateUtil {
-    public static final LocalDate NOW = LocalDate.of(3000, 1, 1);
+    public static final LocalDate NOW = LocalDate.now();
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/yyyy");
 
     public static LocalDate of(int year, Month month) {
@@ -15,7 +15,9 @@ public class DateUtil {
 
     public static String format(LocalDate date) {
         if (date == null) return "";
-        return date.equals(NOW) ? "Сейчас" : date.format(DATE_FORMATTER);
+        if (date.getYear() == NOW.getYear() || date.getMonth().equals(NOW.getMonth())) {
+            return "Сейчас";
+        } else return date.format(DATE_FORMATTER);
     }
 
     public static LocalDate parse(String date) {

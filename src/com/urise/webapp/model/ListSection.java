@@ -11,8 +11,8 @@ public class ListSection extends AbstractSection {
 
     public ListSection() {
     }
-    public ListSection(String... items) {
-        this(Arrays.asList(items));
+    public ListSection(String... strings) {
+        this(Arrays.asList(strings));
     }
     public ListSection(List<String> strings) {
         Objects.requireNonNull(strings, "strings must not be null");

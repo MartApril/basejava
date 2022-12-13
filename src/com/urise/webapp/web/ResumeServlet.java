@@ -115,7 +115,7 @@ public class ResumeServlet extends HttpServlet {
         }
 
         for (SectionType type : SectionType.values()) {
-            String value = request.getParameter(type.name());
+            String value = request.getParameter(type.name()).trim();
             String[] values = request.getParameterValues(type.name());
             if (HtmlUtil.isEmpty(value) && values.length < 2) {
                 resume.getSections().remove(type);
@@ -127,7 +127,7 @@ public class ResumeServlet extends HttpServlet {
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        resume.addSection(type, new ListSection(value.split("\\n")));
+                        resume.addSection(type, new ListSection(value.replaceAll("\n\r", "").split("\\n")));
                         break;
                     case EDUCATION:
                     case EXPERIENCE:

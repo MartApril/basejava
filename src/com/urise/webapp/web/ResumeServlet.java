@@ -128,7 +128,7 @@ public class ResumeServlet extends HttpServlet {
         }
 
         for (SectionType type : SectionType.values()) {
-            String value = request.getParameter(type.name()).trim();
+            String value = request.getParameter(type.name());
             String[] values = request.getParameterValues(type.name());
             if (HtmlUtil.isEmpty(value) && values.length < 2) {
                 resume.getSections().remove(type);
@@ -145,7 +145,7 @@ public class ResumeServlet extends HttpServlet {
                     case EDUCATION:
                     case EXPERIENCE:
                         List<Organization> organizations = new ArrayList<>();
-                        String[] urls = request.getParameterValues(type.name() + "website");
+                        String[] urls = request.getParameterValues(type.name() + "url");
                         for (int i = 0; i < values.length; i++) {
                             String name = values[i];
                             if (!HtmlUtil.isEmpty(name)) {
